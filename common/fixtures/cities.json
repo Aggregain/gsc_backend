@@ -1,0 +1,822 @@
+[
+{
+    "model": "common.city",
+    "pk": 1,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.737Z",
+        "updated_at": "2025-04-06T18:50:34.737Z",
+        "country": 1,
+        "name": "Абай"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 2,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.750Z",
+        "updated_at": "2025-04-06T18:50:34.750Z",
+        "country": 1,
+        "name": "Аксай"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 3,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.757Z",
+        "updated_at": "2025-04-06T18:50:34.757Z",
+        "country": 1,
+        "name": "Аксу"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 4,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.762Z",
+        "updated_at": "2025-04-06T18:50:34.763Z",
+        "country": 1,
+        "name": "Актобе"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 5,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.768Z",
+        "updated_at": "2025-04-06T18:50:34.768Z",
+        "country": 1,
+        "name": "Алга"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 6,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.773Z",
+        "updated_at": "2025-04-06T18:50:34.773Z",
+        "country": 1,
+        "name": "Алматы"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 7,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.778Z",
+        "updated_at": "2025-04-06T18:50:34.778Z",
+        "country": 1,
+        "name": "Арыс"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 8,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.782Z",
+        "updated_at": "2025-04-06T18:50:34.782Z",
+        "country": 1,
+        "name": "Астана"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 9,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.788Z",
+        "updated_at": "2025-04-06T18:50:34.788Z",
+        "country": 1,
+        "name": "Атбасар"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 10,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.793Z",
+        "updated_at": "2025-04-06T18:50:34.793Z",
+        "country": 1,
+        "name": "Атырау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 11,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.799Z",
+        "updated_at": "2025-04-06T18:50:34.800Z",
+        "country": 1,
+        "name": "Аягоз"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 12,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.804Z",
+        "updated_at": "2025-04-06T18:50:34.804Z",
+        "country": 1,
+        "name": "Байконур"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 13,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.809Z",
+        "updated_at": "2025-04-06T18:50:34.809Z",
+        "country": 1,
+        "name": "Балхаш"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 14,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.816Z",
+        "updated_at": "2025-04-06T18:50:34.816Z",
+        "country": 1,
+        "name": "Булаево"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 15,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.822Z",
+        "updated_at": "2025-04-06T18:50:34.822Z",
+        "country": 1,
+        "name": "Державинск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 16,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.827Z",
+        "updated_at": "2025-04-06T18:50:34.827Z",
+        "country": 1,
+        "name": "Ерейментау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 17,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.833Z",
+        "updated_at": "2025-04-06T18:50:34.833Z",
+        "country": 1,
+        "name": "Есик"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 18,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.839Z",
+        "updated_at": "2025-04-06T18:50:34.839Z",
+        "country": 1,
+        "name": "Есиль"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 19,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.846Z",
+        "updated_at": "2025-04-06T18:50:34.846Z",
+        "country": 1,
+        "name": "Жалагаш"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 20,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.852Z",
+        "updated_at": "2025-04-06T18:50:34.852Z",
+        "country": 1,
+        "name": "Жанаозен"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 21,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.858Z",
+        "updated_at": "2025-04-06T18:50:34.858Z",
+        "country": 1,
+        "name": "Жанатас"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 22,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.863Z",
+        "updated_at": "2025-04-06T18:50:34.863Z",
+        "country": 1,
+        "name": "Жаркент"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 23,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.870Z",
+        "updated_at": "2025-04-06T18:50:34.870Z",
+        "country": 1,
+        "name": "Жезказган"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 24,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.875Z",
+        "updated_at": "2025-04-06T18:50:34.875Z",
+        "country": 1,
+        "name": "Жетысай"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 25,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.881Z",
+        "updated_at": "2025-04-06T18:50:34.881Z",
+        "country": 1,
+        "name": "Житикара"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 26,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.887Z",
+        "updated_at": "2025-04-06T18:50:34.887Z",
+        "country": 1,
+        "name": "Зайсан"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 27,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.893Z",
+        "updated_at": "2025-04-06T18:50:34.893Z",
+        "country": 1,
+        "name": "Зеренда"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 28,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.898Z",
+        "updated_at": "2025-04-06T18:50:34.898Z",
+        "country": 1,
+        "name": "Индербор"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 29,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.904Z",
+        "updated_at": "2025-04-06T18:50:34.904Z",
+        "country": 1,
+        "name": "Кандыагаш"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 30,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.912Z",
+        "updated_at": "2025-04-06T18:50:34.912Z",
+        "country": 1,
+        "name": "Капшагай"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 31,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.919Z",
+        "updated_at": "2025-04-06T18:50:34.919Z",
+        "country": 1,
+        "name": "Караганда"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 32,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.924Z",
+        "updated_at": "2025-04-06T18:50:34.924Z",
+        "country": 1,
+        "name": "Каражал"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 33,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.929Z",
+        "updated_at": "2025-04-06T18:50:34.929Z",
+        "country": 1,
+        "name": "Каратау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 34,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.936Z",
+        "updated_at": "2025-04-06T18:50:34.936Z",
+        "country": 1,
+        "name": "Каркаралы"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 35,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.941Z",
+        "updated_at": "2025-04-06T18:50:34.941Z",
+        "country": 1,
+        "name": "Каскелен"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 36,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.946Z",
+        "updated_at": "2025-04-06T18:50:34.946Z",
+        "country": 1,
+        "name": "Кентау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 37,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.952Z",
+        "updated_at": "2025-04-06T18:50:34.952Z",
+        "country": 1,
+        "name": "Кокшетау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 38,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.956Z",
+        "updated_at": "2025-04-06T18:50:34.956Z",
+        "country": 1,
+        "name": "Конаев"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 39,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.961Z",
+        "updated_at": "2025-04-06T18:50:34.961Z",
+        "country": 1,
+        "name": "Костанай"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 40,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.966Z",
+        "updated_at": "2025-04-06T18:50:34.966Z",
+        "country": 1,
+        "name": "Кулсары"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 41,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.973Z",
+        "updated_at": "2025-04-06T18:50:34.973Z",
+        "country": 1,
+        "name": "Курчатов"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 42,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.977Z",
+        "updated_at": "2025-04-06T18:50:34.977Z",
+        "country": 1,
+        "name": "Кызылорда"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 43,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.982Z",
+        "updated_at": "2025-04-06T18:50:34.982Z",
+        "country": 1,
+        "name": "Ленгер"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 44,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.988Z",
+        "updated_at": "2025-04-06T18:50:34.988Z",
+        "country": 1,
+        "name": "Лисаковск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 45,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.994Z",
+        "updated_at": "2025-04-06T18:50:34.994Z",
+        "country": 1,
+        "name": "Мамлютка"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 46,
+    "fields": {
+        "created_at": "2025-04-06T18:50:34.998Z",
+        "updated_at": "2025-04-06T18:50:34.998Z",
+        "country": 1,
+        "name": "Макинск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 47,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.003Z",
+        "updated_at": "2025-04-06T18:50:35.003Z",
+        "country": 1,
+        "name": "Павлодар"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 48,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.009Z",
+        "updated_at": "2025-04-06T18:50:35.009Z",
+        "country": 1,
+        "name": "Петропавловск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 49,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.015Z",
+        "updated_at": "2025-04-06T18:50:35.015Z",
+        "country": 1,
+        "name": "Приозёрск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 50,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.020Z",
+        "updated_at": "2025-04-06T18:50:35.020Z",
+        "country": 1,
+        "name": "Риддер"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 51,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.026Z",
+        "updated_at": "2025-04-06T18:50:35.026Z",
+        "country": 1,
+        "name": "Рудный"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 52,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.034Z",
+        "updated_at": "2025-04-06T18:50:35.034Z",
+        "country": 1,
+        "name": "Сарань"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 53,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.039Z",
+        "updated_at": "2025-04-06T18:50:35.039Z",
+        "country": 1,
+        "name": "Саркан"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 54,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.045Z",
+        "updated_at": "2025-04-06T18:50:35.045Z",
+        "country": 1,
+        "name": "Сарыагаш"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 55,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.051Z",
+        "updated_at": "2025-04-06T18:50:35.051Z",
+        "country": 1,
+        "name": "Сатпаев"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 56,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.058Z",
+        "updated_at": "2025-04-06T18:50:35.058Z",
+        "country": 1,
+        "name": "Семей"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 57,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.064Z",
+        "updated_at": "2025-04-06T18:50:35.064Z",
+        "country": 1,
+        "name": "Сергеевка"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 58,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.080Z",
+        "updated_at": "2025-04-06T18:50:35.081Z",
+        "country": 1,
+        "name": "Серебрянск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 59,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.086Z",
+        "updated_at": "2025-04-06T18:50:35.086Z",
+        "country": 1,
+        "name": "Степногорск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 60,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.093Z",
+        "updated_at": "2025-04-06T18:50:35.093Z",
+        "country": 1,
+        "name": "Степняк"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 61,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.098Z",
+        "updated_at": "2025-04-06T18:50:35.098Z",
+        "country": 1,
+        "name": "Талгар"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 62,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.104Z",
+        "updated_at": "2025-04-06T18:50:35.104Z",
+        "country": 1,
+        "name": "Талдыкорган"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 63,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.115Z",
+        "updated_at": "2025-04-06T18:50:35.115Z",
+        "country": 1,
+        "name": "Тараз"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 64,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.120Z",
+        "updated_at": "2025-04-06T18:50:35.120Z",
+        "country": 1,
+        "name": "Текели"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 65,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.126Z",
+        "updated_at": "2025-04-06T18:50:35.126Z",
+        "country": 1,
+        "name": "Темиртау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 66,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.134Z",
+        "updated_at": "2025-04-06T18:50:35.134Z",
+        "country": 1,
+        "name": "Тобыл"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 67,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.139Z",
+        "updated_at": "2025-04-06T18:50:35.139Z",
+        "country": 1,
+        "name": "Туркестан"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 68,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.146Z",
+        "updated_at": "2025-04-06T18:50:35.146Z",
+        "country": 1,
+        "name": "Уральск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 69,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.154Z",
+        "updated_at": "2025-04-06T18:50:35.154Z",
+        "country": 1,
+        "name": "Ушарал"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 70,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.160Z",
+        "updated_at": "2025-04-06T18:50:35.160Z",
+        "country": 1,
+        "name": "Уштобе"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 71,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.169Z",
+        "updated_at": "2025-04-06T18:50:35.169Z",
+        "country": 1,
+        "name": "Усть-Каменогорск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 72,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.230Z",
+        "updated_at": "2025-04-06T18:50:35.230Z",
+        "country": 1,
+        "name": "Форт-Шевченко"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 73,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.241Z",
+        "updated_at": "2025-04-06T18:50:35.241Z",
+        "country": 1,
+        "name": "Хромтау"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 74,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.251Z",
+        "updated_at": "2025-04-06T18:50:35.251Z",
+        "country": 1,
+        "name": "Шалкар"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 75,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.259Z",
+        "updated_at": "2025-04-06T18:50:35.259Z",
+        "country": 1,
+        "name": "Шар"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 76,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.268Z",
+        "updated_at": "2025-04-06T18:50:35.268Z",
+        "country": 1,
+        "name": "Шардара"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 77,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.276Z",
+        "updated_at": "2025-04-06T18:50:35.276Z",
+        "country": 1,
+        "name": "Шахтинск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 78,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.285Z",
+        "updated_at": "2025-04-06T18:50:35.285Z",
+        "country": 1,
+        "name": "Шемонаиха"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 79,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.290Z",
+        "updated_at": "2025-04-06T18:50:35.290Z",
+        "country": 1,
+        "name": "Шу"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 80,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.301Z",
+        "updated_at": "2025-04-06T18:50:35.302Z",
+        "country": 1,
+        "name": "Шымкент"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 81,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.307Z",
+        "updated_at": "2025-04-06T18:50:35.307Z",
+        "country": 1,
+        "name": "Щучинск"
+    }
+},
+{
+    "model": "common.city",
+    "pk": 82,
+    "fields": {
+        "created_at": "2025-04-06T18:50:35.313Z",
+        "updated_at": "2025-04-06T18:50:35.313Z",
+        "country": 1,
+        "name": "Экибастуз"
+    }
+}
+]
