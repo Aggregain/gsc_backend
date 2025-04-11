@@ -10,8 +10,8 @@ class BaseModel(models.Model):
 
 
 class Country(BaseModel):
-    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название страны')
-
+    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название страны', unique=True)
+    
     def __str__(self):
         return f'{self.name}'
 
@@ -22,7 +22,7 @@ class Country(BaseModel):
 
 class City(BaseModel):
     country = models.ForeignKey(Country, on_delete=models.PROTECT, verbose_name='страна')
-    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название города')
+    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название города', unique=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -34,7 +34,7 @@ class City(BaseModel):
 
 class EducationPlace(BaseModel):
     city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name='город')
-    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название учебного заведения')
+    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название учебного заведения', unique=True)
 
     def __str__(self):
         return f'{self.name}'
