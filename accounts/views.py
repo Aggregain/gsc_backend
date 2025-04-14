@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from .permissions import IsOwnerOrAdminPermission
 from . import serializers
 from .client import GoogleOAuth2Client
 
@@ -67,3 +67,8 @@ class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.request.user
+
+class DeleteAttachmentView(generics.DestroyAPIView):
+    permission_classes = [IsOwnerOrAdminPermission,]
+    def get_queryset(self):
+        return self.request.user.attachments.all()

@@ -43,13 +43,20 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'аккаунты'
 
 
+
 class Attachment(BaseModel):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='аккаунт',
-                                related_name='certificates')
-    name = models.CharField(max_length=255, verbose_name='название файла/сертификата')
+                                related_name='attachments')
+    name = models.CharField(max_length=255, verbose_name='название файла/сертификата', unique=True)
     grade = models.DecimalField(verbose_name='оценка', null=True, blank=True, max_digits=5, decimal_places=2)
     file = models.FileField(upload_to=attachment_path, null=True, blank=True, verbose_name='файл')
     meta = models.JSONField(null=True, blank=True, verbose_name='дополнительно')
 
     def __str__(self):
         return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'документ'
+        verbose_name_plural = 'документы'
+
+        unique_together = ('account', 'name',)

@@ -15,7 +15,7 @@ from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm
 
 from .forms import AccountChangeForm, AccountCreationForm
-from .models import Account
+from .models import Account, Attachment
 
 admin.site.unregister(PeriodicTask)
 admin.site.unregister(IntervalSchedule)
@@ -73,3 +73,8 @@ class AccountAdmin(BaseUserAdmin, ModelAdmin):
     list_filter = ("is_staff", "is_superuser", "is_active",)
     search_fields = ("first_name", "last_name", "second_name", "email")
     ordering = ("created_at",)
+
+
+@admin.register(Attachment)
+class EducationPlaceAdmin(ModelAdmin):
+    ...
