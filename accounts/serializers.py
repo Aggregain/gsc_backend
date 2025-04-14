@@ -12,8 +12,17 @@ class AttachmentWriteSerializer(serializers.Serializer):
     meta = serializers.JSONField(required=False)
 
 
+class AttachmentSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = Attachment
+        exclude = ['account',]
+        read_only_fields = ['id',]
+
+
 class CreateAccountSerializer(serializers.ModelSerializer):
-    attachments = serializers.DictField(child=AttachmentWriteSerializer(), required=False)
+    attachments = serializers.DictField(child=AttachmentWriteSerializer(), required=False, write_only=True)
     class Meta:
         model = get_user_model()
 

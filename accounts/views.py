@@ -11,10 +11,12 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from .models import Attachment
 from .permissions import IsOwnerOrAdminPermission
 from . import serializers
 from .client import GoogleOAuth2Client
-
+from rest_framework.viewsets import ModelViewSet
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -68,7 +70,11 @@ class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         return self.request.user
 
-class DeleteAttachmentView(generics.DestroyAPIView):
+
+
+class AttachmentViewSet(ModelViewSet):
     permission_classes = [IsOwnerOrAdminPermission,]
+    serializer_class = serializers.AttachmentSerializer
+
     def get_queryset(self):
-        return self.request.user.attachments.all()
+        return Attachment.objects.filter(account=self.request.user).order_by("-id")

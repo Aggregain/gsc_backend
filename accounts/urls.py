@@ -1,12 +1,13 @@
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
-from django.contrib.auth.views import PasswordResetDoneView
+from rest_framework.routers import DefaultRouter
 from django.urls import path
 from django.urls.conf import re_path
 
 from . import views
 from .views import LoginPage, GoogleLoginCallback, GoogleLogin
 
-
+router = DefaultRouter()
+router.register(basename='attachments', prefix='attachments', viewset=views.AttachmentViewSet)
 
 urlpatterns = [
     path('register/', views.CreateAccountView.as_view(), name='register'),
@@ -19,5 +20,4 @@ urlpatterns = [
     re_path(r'password/reset/?$', PasswordResetView.as_view(), name='rest_password_reset'),
     path('password/reset/confirm/<str:uidb64>/<str:token>', PasswordResetConfirmView.as_view(),
          name='password_reset_confirm'),
-    path('attachments/<int:pk>', views.DeleteAttachmentView.as_view(), name='attachment_delete'),
-]
+] + router.urls
