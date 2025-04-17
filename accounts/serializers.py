@@ -11,11 +11,15 @@ class AttachmentSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', ]
 
 
-class AccountReadSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(read_only=True)
     class Meta:
         model = get_user_model()
 
-        exclude = ['last_login', 'is_active', 'groups', 'user_permissions', ]
+        fields = ['first_name', 'second_name', 'last_name', 'email', 'avatar',
+                  'degree', 'gre_grade', 'gmat_grade', 'duolingo_grade', 'sat_grade',
+                  'toefl_grade', 'toefl_grade', 'ielts_grade', 'education_place',
+                  'country', 'city', 'birth_date', 'phone_number']
         read_only_fields = ['id', 'created_at', 'updated_at', 'is_staff', 'is_superuser']
         extra_kwargs = {
             'password': {
@@ -37,9 +41,6 @@ class AccountReadSerializer(serializers.ModelSerializer):
         return user
 
 
-class AccountEditSerializer(AccountReadSerializer):
-    class Meta(AccountReadSerializer.Meta):
-        exclude = AccountReadSerializer.Meta.exclude + ['avatar', ]
 
 
 class AvatarEditSerializer(serializers.ModelSerializer):

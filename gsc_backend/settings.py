@@ -270,3 +270,8 @@ UNFOLD = {
     "SITE_HEADER": "Управление данными сайта",
     "THEME": "dark",
 }
+
+#TODO
+# add model for program and speciality group
+# add model for application
+# add model for notification

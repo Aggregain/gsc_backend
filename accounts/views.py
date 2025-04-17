@@ -71,34 +71,14 @@ class RefreshView(TokenRefreshView):
 
 class CreateAccountView(generics.CreateAPIView):
     permission_classes = [AllowAny]
-    serializer_class = serializers.AccountEditSerializer
+    serializer_class = serializers.AccountSerializer
 
-@extend_schema(
-    methods=["GET"],
-    responses=serializers.AccountReadSerializer,
-    description="Получить данные профиля пользователя"
-)
-@extend_schema(
-    methods=["PUT", "PATCH"],
-    request=serializers.AccountEditSerializer,
-    responses=serializers.AccountReadSerializer,
-    description="Обновить профиль пользователя"
-)
-@extend_schema(
-    methods=["DELETE"],
-    responses=OpenApiResponse(description="Профиль удалён"),
-    description="Удалить профиль пользователя"
-)
+
 class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
-
+    serializer_class = serializers.AccountSerializer
     def get_object(self):
         return self.request.user
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return serializers.AccountReadSerializer
-        return serializers.AccountEditSerializer
 
 
 class AvatarEditView(generics.UpdateAPIView):
