@@ -44,7 +44,7 @@ class AccountAdmin(BaseUserAdmin, ModelAdmin):
         (None, {"fields": ("password",)}),
         (
             _("Personal info"),
-            {"fields": ("first_name", "second_name", "last_name", "birth_date", "avatar", "email")}),
+            {"fields": ("first_name", "second_name", "last_name", "birth_date", "avatar", "email", "degree")}),
         (
             _("Permissions"),
             {
@@ -76,5 +76,5 @@ class AccountAdmin(BaseUserAdmin, ModelAdmin):
 
 
 @admin.register(Attachment)
-class EducationPlaceAdmin(ModelAdmin):
+class AttachmentAdmin(ModelAdmin):
     ...

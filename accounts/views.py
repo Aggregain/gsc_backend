@@ -1,53 +1,64 @@
+import json
+
 import requests
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from dj_rest_auth.registration.views import SocialLoginView
-from django.conf import settings
-from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic.base import View
+from django.contrib.auth import get_user_model
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import generics
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from . import serializers
 from .models import Attachment
 from .permissions import IsOwnerOrAdminPermission
-from . import serializers
-from .client import GoogleOAuth2Client
-from rest_framework.viewsets import ModelViewSet
 
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
-    callback_url = settings.GOOGLE_OAUTH_CALLBACK_URL
-    client_class = GoogleOAuth2Client
+User = get_user_model()
 
 
-class GoogleLoginCallback(APIView):
-
-    def get(self, request, *args, **kwargs):
-        code = request.GET.get("code")
-
-        if code is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        token_endpoint_url = request.build_absolute_uri(reverse("google_login"))
-        response = requests.post(url=token_endpoint_url, data={"code": code})
-
-        return Response(response.json(), status=status.HTTP_200_OK)
-
-
-class LoginPage(View):
-    def get(self, request, *args, **kwargs):
-        return render(
-            request,
-            "login.html",
-            {
-                "google_callback_uri": settings.GOOGLE_OAUTH_CALLBACK_URL,
-                "google_client_id": settings.GOOGLE_CLIENT_ID,
+class GoogleView(APIView):
+    @extend_schema(
+        request=serializers.GoogleTokenSerializer,
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "refresh": {"type": "string", "description": "Refresh token"},
+                    "access": {"type": "string", "description": "Access token"},
+                },
             },
-        )
+            400: {"type": "object", "description": "Validation errors or invalid token"},
+        },
+        description="Verify google token and activate the account.")
+    def post(self, request):
+        serializer = serializers.GoogleTokenSerializer(data=request.data)
+        if serializer.is_valid():
+            payload = {'access_token': serializer.data}
+            r = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
+            data = json.loads(r.text)
+
+            if 'error' in data:
+                content = {'message': 'wrong google token / this google token is already expired.'}
+                return Response(content)
+
+            # create user if not exist
+            try:
+                user = User.objects.get(email=data['email'])
+            except User.DoesNotExist:
+                user = User.objects.create_user(email=data['email'],
+                                                first_name=data['first_name'],
+                                                second_name=data['second_name'])
+
+            token = RefreshToken.for_user(user)
+            response = dict()
+            response['first_name'] = user.first_name
+            response['second_name'] = user.second_name
+            response['access_token'] = str(token.access_token)
+            response['refresh_token'] = str(token)
+            return Response(response)
+        return Response(serializer.errors, status=400)
 
 
 class TokenView(TokenObtainPairView):
@@ -60,21 +71,47 @@ class RefreshView(TokenRefreshView):
 
 class CreateAccountView(generics.CreateAPIView):
     permission_classes = [AllowAny]
-    serializer_class = serializers.CreateAccountSerializer
+    serializer_class = serializers.AccountEditSerializer
 
-
+@extend_schema(
+    methods=["GET"],
+    responses=serializers.AccountReadSerializer,
+    description="Получить данные профиля пользователя"
+)
+@extend_schema(
+    methods=["PUT", "PATCH"],
+    request=serializers.AccountEditSerializer,
+    responses=serializers.AccountReadSerializer,
+    description="Обновить профиль пользователя"
+)
+@extend_schema(
+    methods=["DELETE"],
+    responses=OpenApiResponse(description="Профиль удалён"),
+    description="Удалить профиль пользователя"
+)
 class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.CreateAccountSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.AccountReadSerializer
+        return serializers.AccountEditSerializer
+
+
+class AvatarEditView(generics.UpdateAPIView):
+    serializer_class = serializers.AvatarEditSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
 
 
-
 class AttachmentViewSet(ModelViewSet):
-    permission_classes = [IsOwnerOrAdminPermission,]
+    permission_classes = [IsOwnerOrAdminPermission, ]
     serializer_class = serializers.AttachmentSerializer
 
     def get_queryset(self):
-        return Attachment.objects.filter(account=self.request.user).order_by("-id")
+        return Attachment.objects.filter(account=self.request.user).order_by("-created_at")

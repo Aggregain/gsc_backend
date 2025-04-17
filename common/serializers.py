@@ -5,17 +5,17 @@ from .models import City, Country, EducationPlace
 class CountrySerializer(ModelSerializer):
     class Meta:
         model = Country
-        fields = ['id', 'name']
+        fields = ['id', 'name',]
 
 
 class CitySerializer(ModelSerializer):
     class Meta:
         model = City
-        fields = ['id', 'name']
+        fields = ['id', 'country', 'name']
 
 
 class EducationPlaceSerializer(ModelSerializer):
     class Meta:
         model = EducationPlace
-        fields = ['id', 'name']
+        fields = ['id', 'city' ,'name', 'description', 'is_for_admission']
 

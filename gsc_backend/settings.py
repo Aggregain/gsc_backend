@@ -38,14 +38,16 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'django_celery_results',
     'django_celery_beat',
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "dj_rest_auth.registration",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth.registration',
+    'ckeditor',
 
     'accounts.apps.AccountsConfig',
     'common.apps.CommonConfig',
+    'applications.apps.ApplicationsConfig',
 ]
 
 REST_AUTH = {
@@ -265,6 +267,6 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 UNFOLD = {
     "SITE_TITLE": "Админ панель GSC STUDY",
-    "SITE_HEADER": "Управление пользователями",
+    "SITE_HEADER": "Управление данными сайта",
     "THEME": "dark",
 }
