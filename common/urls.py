@@ -5,4 +5,5 @@ app_name = 'common'
 
 urlpatterns = [
     path('roster/', views.RosterView.as_view(), name='roster'),
+    path('programs/', views.ProgramListApiView.as_view(), name='programs-list'),
 ]

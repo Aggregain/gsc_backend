@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, Serializer
-from .models import City, Country, EducationPlace
+from .models import City, Country, EducationPlace, Program, AcademicRequirement
 
 
 class CountrySerializer(ModelSerializer):
@@ -19,3 +19,14 @@ class EducationPlaceSerializer(ModelSerializer):
         model = EducationPlace
         fields = ['id', 'city' ,'name', 'description', 'is_for_admission']
 
+
+class AcademicRequirementSerializer(ModelSerializer):
+    class Meta:
+        model = AcademicRequirement
+        fields = '__all__'
+
+class ProgramSerializer(ModelSerializer):
+    academic_requirements = AcademicRequirementSerializer(many=True, read_only=True)
+    class Meta:
+        model = Program
+        fields = '__all__'

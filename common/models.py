@@ -2,6 +2,9 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from . import constants
 
+def education_place_path(instance, filename):
+    return f'education_places/{instance.name}/{filename}'
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
@@ -38,7 +41,12 @@ class EducationPlace(BaseModel):
     city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name='город', related_name='education_places')
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название учебного заведения',
                             unique=True)
+    logo = models.ImageField(null=True, blank=True, verbose_name='лого', upload_to=education_place_path)
+    image = models.ImageField(null=True, blank=True, verbose_name='фото ВУЗа', upload_to=education_place_path)
     description = RichTextField(null=True, blank=True, verbose_name='описание')
+    rating = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='рейтинг')
+    foundation_date = models.DateField(null=True, blank=True, verbose_name='Дата основания')
+    prices_data = models.JSONField(null=True, blank=True, verbose_name='цены')
     is_for_admission = models.BooleanField(default=True, verbose_name='доступно для поступления')
 
     def __str__(self):
@@ -49,11 +57,55 @@ class EducationPlace(BaseModel):
         verbose_name_plural = 'учебные заведения'
 
 
+class Program(BaseModel):
+    name = models.CharField(max_length=128, choices=constants.DegreeChoices, verbose_name='название программы')
+    education_place = models.ForeignKey(EducationPlace, verbose_name='учебное заведение', related_name='degrees',
+                                        on_delete=models.PROTECT)
+    description_general = RichTextField(verbose_name='описание общее', null=True, blank=True)
+    description_academic = RichTextField(verbose_name='описание академ требований', null=True, blank=True)
+    description_scholarship = RichTextField(verbose_name='описание стипендии', null=True, blank=True)
+    description_prices = RichTextField(verbose_name='описание цен', null=True, blank=True)
+
+    duration_years = models.PositiveIntegerField(verbose_name='Длительность обучения(лет)')
+    admission_deadline = models.DateField(null=True, blank=True, verbose_name='дедлайн подачи')
+    specialty_durations = models.JSONField(null=True, blank=True,
+                                           verbose_name='мин макс длительность обучения специальностей')
+    price = models.DecimalField(max_digits=5, decimal_places=2, null=True,
+                                blank=True, verbose_name='стоимость обучения')
+    language = models.CharField(max_length=128, choices=constants.LanguageChoices, verbose_name='язык обучения')
+    format = models.CharField(max_length=128, choices=constants.FormatChoices, verbose_name='формат обучения')
+
+    def __str__(self):
+        return f'{self.name} {self.education_place}'
+
+    class Meta:
+        verbose_name = 'программа образования'
+        verbose_name_plural = 'программы образования'
+        unique_together = ('education_place', 'name')
+
+
+class SpecialtyGroup(BaseModel):
+    name = models.CharField(max_length=255, verbose_name='название', unique=True)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'Группа специальностей'
+        verbose_name_plural = 'Группы специальностей'
+
+
 class Specialty(BaseModel):
     name = models.CharField(max_length=255, verbose_name='название специальности')
-    education_place = models.ForeignKey(EducationPlace, on_delete=models.PROTECT, verbose_name='универ', related_name='specialities')
+    education_place = models.ForeignKey(EducationPlace, on_delete=models.PROTECT,
+                                        verbose_name='учебное заведение', related_name='specialities')
     description = RichTextField(verbose_name='описание', null=True, blank=True)
-    degree = models.CharField(max_length=128, verbose_name='степень', choices=constants.DegreeChoices)
+
+    specialty_group = models.ForeignKey(SpecialtyGroup, on_delete=models.PROTECT, verbose_name='группа',
+                                        related_name='specialities')
+    program = models.ForeignKey(Program, verbose_name='программа', related_name='specialities',
+                                on_delete=models.PROTECT)
+    duration = models.PositiveIntegerField(verbose_name='длительность(лет)')
 
     def __str__(self):
         return f'{self.name} {self.education_place}'
@@ -61,4 +113,58 @@ class Specialty(BaseModel):
     class Meta:
         verbose_name = 'специальность'
         verbose_name_plural = 'специальности'
-        unique_together = ('education_place', 'degree', 'name')
+        unique_together = ('education_place', 'program', 'name')
+
+
+class Deadline(BaseModel):
+    education_place = models.ForeignKey(EducationPlace, verbose_name='учебное заведение', related_name='deadlines',
+                                        on_delete=models.CASCADE)
+    name = models.CharField(max_length=255,
+                            verbose_name='название дедлайна',)
+    due_to = models.DateField(verbose_name='до:')
+
+    def __str__(self):
+        return f'{self.name} {self.due_to}'
+
+    class Meta:
+        verbose_name = 'дедлайн'
+        verbose_name_plural = 'дедлайны'
+        unique_together = ('education_place', 'name')
+
+
+class Expense(BaseModel):
+    education_place = models.ForeignKey(EducationPlace, verbose_name='учебное заведение', related_name='expenses',
+                                        on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, verbose_name='тип расходов')
+    price_per_year_text = models.CharField(max_length=255, verbose_name='цена')
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'расход'
+        verbose_name_plural = 'расходы'
+        unique_together = ('education_place', 'name')
+
+
+class AcademicRequirement(BaseModel):
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, verbose_name='программа',
+                                related_name='academic_requirements')
+    name = models.CharField(max_length=255, verbose_name='название требования',)
+    treshold = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='пороговый балл')
+
+    def __str__(self):
+        return f'{self.name} {self.treshold}'
+
+    class Meta:
+        verbose_name = 'академические требования'
+        verbose_name_plural = 'академическое требование'
+        unique_together = ('program', 'name')
+    
+    def save(
+        self,
+        *args,
+        **kwargs
+    ):
+        self.name = self.name.upper()
+        return super().save(*args, **kwargs)
