@@ -1,11 +1,11 @@
 import django_filters
 from django.db.models import Q
 
-from common.models import Program
+from common.models import Program, EducationPlace
 
 
 class ProgramFilter(django_filters.FilterSet):
-    specialty_group = django_filters.BaseInFilter(field_name='specialities__specialty_group__name', lookup_expr='in', label='группы специальностей')
+    specialty_group = django_filters.BaseInFilter(field_name='specialities__specialty_group__id', lookup_expr='in', label='группы специальностей')
     name = django_filters.BaseInFilter(field_name='name', lookup_expr='in', label='название программы')
     price_min = django_filters.NumberFilter(field_name='price', lookup_expr='gte', label='минимальная стоимость')
     price_max = django_filters.NumberFilter(field_name='price', lookup_expr='lte', label='максимальная стоимость')
@@ -23,12 +23,12 @@ class ProgramFilter(django_filters.FilterSet):
         label='Дедлайн до или в эту дату'
     )
     city = django_filters.BaseInFilter(
-        field_name='education_place__city__name',
+        field_name='education_place__city__id',
         lookup_expr='in',
         label='Город (название)'
     )
     country = django_filters.BaseInFilter(
-        field_name='education_place__city__country__name',
+        field_name='education_place__city__country__id',
         lookup_expr='in',
         label='Страна (название)'
     )
@@ -38,10 +38,11 @@ class ProgramFilter(django_filters.FilterSet):
         label='Названия требований (список)'
     )
 
-    requirements = django_filters.CharFilter(
+    requirements_grades = django_filters.CharFilter(
         method='filter_multiple_requirements',
         label='Требования (название:порог через запятую)'
     )
+
 
 
 
@@ -68,7 +69,8 @@ class ProgramFilter(django_filters.FilterSet):
                   'price_max',
                   'admission_deadline_after',
                   'admission_deadline_before',
-                  'requirements'
+                  'requirements_grades',
+                  'requirement_names',
                   ]
 
 

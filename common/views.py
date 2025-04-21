@@ -3,10 +3,11 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from .constants import LanguageChoices, FormatChoices, DegreeChoices
 from .filters import ProgramFilter
-from .models import Country, City, EducationPlace, Program
-from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerializer, ProgramSerializer
+from .models import Country, City, EducationPlace, Program, SpecialtyGroup
+from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerializer, ProgramSerializer, \
+    SpecialtyGroupSerializer
 
 
 class RosterView(APIView):
@@ -15,10 +16,15 @@ class RosterView(APIView):
         countries = Country.objects.all()
         cities = City.objects.select_related('country').all()
         education_places = EducationPlace.objects.select_related('city').all()
+        specialty_groups = SpecialtyGroup.objects.all()
         return Response({
             'countries': CountrySerializer(countries, many=True).data,
             'cities': CitySerializer(cities, many=True).data,
-            'education_places': EducationPlaceSerializer(education_places, many=True).data
+            'education_places': EducationPlaceSerializer(education_places, many=True).data,
+            'specialty_groups': SpecialtyGroupSerializer(specialty_groups, many=True).data,
+            'languages': LanguageChoices.values,
+            'degrees': DegreeChoices.values,
+            'formats': FormatChoices.values,
         })
 
 
@@ -36,13 +42,14 @@ class ProgramListApiView(ListAPIView):
             "education_place__deadlines",
             "academic_requirements",
         )
-        .all()
+        .filter(education_place__is_for_admission=True).order_by("name")
     )
+
     serializer_class = ProgramSerializer
     filterset_class = ProgramFilter
     ordering_fields = "__all__"
     permission_classes = [IsAuthenticated]
-    page_size = 30
+    # page_size = 30
 
     def list(self, request, *args, **kwargs):
 
@@ -52,13 +59,9 @@ class ProgramListApiView(ListAPIView):
         filtered_queryset = self.filter_queryset(base_queryset)
 
 
-        page = self.paginate_queryset(filtered_queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            response_data = self.get_paginated_response(serializer.data)
-        else:
-            serializer = self.get_serializer(filtered_queryset, many=True)
-            response_data = Response(serializer.data)
+
+        serializer = self.get_serializer(filtered_queryset, many=True)
+
 
         custom_data = {'filters': {
                         'programs': filtered_queryset.
@@ -71,17 +74,17 @@ class ProgramListApiView(ListAPIView):
             distinct(),
             'max_price': filtered_queryset.aggregate(Max('price'))['price__max'],
             'min_price': filtered_queryset.aggregate(Min('price'))['price__min'],
-            'countries': filtered_queryset.values_list("education_place__city__country__name", flat=True).distinct(),
-            'cities': filtered_queryset.values_list("education_place__city__name", flat=True).distinct(),
-            'specialty_groups': filtered_queryset.values_list("specialities__specialty_group__name", flat=True).distinct(),
+            'countries': filtered_queryset.values_list("education_place__city__country__id", flat=True).distinct(),
+            'cities': filtered_queryset.values_list("education_place__city__id", flat=True).distinct(),
+            'specialty_groups': filtered_queryset.values_list("specialities__specialty_group__id", flat=True).distinct(),
             'deadline_min': filtered_queryset.aggregate(Min('admission_deadline'))['admission_deadline__min'],
-
+            'certificates': filtered_queryset.values_list("academic_requirements__name", flat=True).distinct(),
             'deadline_max': filtered_queryset.aggregate(Max('admission_deadline'))['admission_deadline__max'],
 
         }
 
+        response_data = Response(data=[[serializer.data], [custom_data]])
 
-        response_data.data.append(custom_data)
 
 
         return response_data

@@ -1,5 +1,7 @@
-from rest_framework.serializers import ModelSerializer, Serializer
-from .models import City, Country, EducationPlace, Program, AcademicRequirement
+
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
+
+from .models import City, Country, EducationPlace, Program, AcademicRequirement, SpecialtyGroup
 
 
 class CountrySerializer(ModelSerializer):
@@ -25,8 +27,17 @@ class AcademicRequirementSerializer(ModelSerializer):
         model = AcademicRequirement
         fields = '__all__'
 
+class SpecialtyGroupSerializer(ModelSerializer):
+    class Meta:
+        model = SpecialtyGroup
+        fields = '__all__'
+
 class ProgramSerializer(ModelSerializer):
     academic_requirements = AcademicRequirementSerializer(many=True, read_only=True)
+    university_rating = SerializerMethodField()
     class Meta:
         model = Program
         fields = '__all__'
+
+    def get_university_rating(self, obj):
+        return str(obj.education_place.rating)
