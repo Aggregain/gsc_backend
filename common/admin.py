@@ -48,7 +48,7 @@ class ExpenseInline(TabularInline):
     extra = 0
 
 class SpecialtyInline(TabularInline):
-    fields = ('name',  'program', 'specialty_group',
+    fields = ('name',  'program', 'specialty_group', 'duration',
               'edit_link')
     model = Specialty
     extra = 0
