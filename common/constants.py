@@ -20,3 +20,31 @@ class LanguageChoices(models.TextChoices):
     russian = 'RUSSIAN', 'russian'
 
 
+LANGUAGE_TR = [
+    {'id': LanguageChoices.english,
+     'name': 'Английский'},
+    {'id': LanguageChoices.french,
+     'name': 'Французкий'},
+    {'id': LanguageChoices.spanish,
+     'name': 'Испанский'},
+    {'id': LanguageChoices.russian,
+     'name': 'Русский'},
+]
+
+FORMAT_TR = [
+    {'id': FormatChoices.online,
+     'name': 'Онлайн'},
+    {'id': FormatChoices.offline,
+     'name': 'Оффлайн'},
+]
+
+DEGREE_TR = [
+    {'id': DegreeChoices.bachelor,
+     'name': 'Бакалавриат'},
+    {'id': DegreeChoices.masters,
+     'name': 'Магистратура'},
+    {'id': DegreeChoices.mba,
+     'name': 'МБА'},
+    {'id': DegreeChoices.phd,
+     'name': 'Докторантура'},
+]

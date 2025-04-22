@@ -3,7 +3,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .constants import LanguageChoices, FormatChoices, DegreeChoices
+
+from .constants import LANGUAGE_TR, FORMAT_TR, DEGREE_TR
 from .filters import ProgramFilter
 from .models import Country, City, EducationPlace, Program, SpecialtyGroup
 from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerializer, ProgramSerializer, \
@@ -22,9 +23,9 @@ class RosterView(APIView):
             'cities': CitySerializer(cities, many=True).data,
             'education_places': EducationPlaceSerializer(education_places, many=True).data,
             'specialty_groups': SpecialtyGroupSerializer(specialty_groups, many=True).data,
-            'languages': LanguageChoices.values,
-            'degrees': DegreeChoices.values,
-            'formats': FormatChoices.values,
+            'languages': LANGUAGE_TR,
+            'degrees': DEGREE_TR,
+            'formats': FORMAT_TR,
         })
 
 
@@ -67,24 +68,36 @@ class ProgramListApiView(ListAPIView):
         custom_data = {'filters': {
                         'programs': filtered_queryset.
                                    values_list("name", flat=True).
-                                   distinct()
-        },
-            'languages': filtered_queryset.values_list("language", flat=True).
                                    distinct(),
-            'formats': filtered_queryset.values_list("format", flat=True).
-            distinct(),
-            'max_price': filtered_queryset.aggregate(Max('price'))['price__max'],
-            'min_price': filtered_queryset.aggregate(Min('price'))['price__min'],
-            'countries': filtered_queryset.values_list("education_place__city__country__id", flat=True).distinct(),
-            'cities': filtered_queryset.values_list("education_place__city__id", flat=True).distinct(),
-            'specialty_groups': filtered_queryset.values_list("specialities__specialty_group__id", flat=True).distinct(),
-            'deadline_min': filtered_queryset.aggregate(Min('admission_deadline'))['admission_deadline__min'],
-            'certificates': filtered_queryset.values_list("academic_requirements__name", flat=True).distinct(),
-            'deadline_max': filtered_queryset.aggregate(Max('admission_deadline'))['admission_deadline__max'],
+            'languages': filtered_queryset.exclude(language__isnull=True).order_by("language").
+            values_list("language", flat=True).distinct("language"),
+            'formats': filtered_queryset.exclude(format__isnull=True).order_by("format").values_list("format",
+                                                                                                     flat=True).
+            distinct("format"),
+            'max_price': filtered_queryset.aggregate(Max('price'))['price__max'] or 0,
+            'min_price': filtered_queryset.aggregate(Min('price'))['price__min'] or 0,
+            'countries': filtered_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
+                "education_place__city__country__id").values_list("education_place__city__country__id",
+                                                                  flat=True).distinct(
+                "education_place__city__country__id"),
+            'cities': filtered_queryset.exclude(education_place__city__id__isnull=True).order_by(
+                "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
+                "education_place__city__id"),
+            'specialty_groups': filtered_queryset.exclude(specialities__specialty_group__id__isnull=True).order_by(
+                "specialities__specialty_group__id").values_list("specialities__specialty_group__id",
+                                                                 flat=True).distinct(
+                "specialities__specialty_group__id"),
+            'deadline_min': filtered_queryset.aggregate(Min('admission_deadline'))['admission_deadline__min'] or 0,
+            'certificates': filtered_queryset.exclude(academic_requirements__name__isnull=True).order_by(
+                "academic_requirements__name").values_list("academic_requirements__name", flat=True).distinct(
+                "academic_requirements__name"),
+            'deadline_max': filtered_queryset.aggregate(Max('admission_deadline'))['admission_deadline__max'] or 0,
+        },
+
 
         }
 
-        response_data = Response(data=[[serializer.data], [custom_data]])
+        response_data = Response(data={'programs':serializer.data, 'filters':custom_data})
 
 
 
