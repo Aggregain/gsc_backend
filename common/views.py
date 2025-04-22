@@ -49,6 +49,7 @@ class ProgramListApiView(ListAPIView):
     filterset_class = ProgramFilter
     ordering_fields = "__all__"
     permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
     # page_size = 30
 
     def list(self, request, *args, **kwargs):

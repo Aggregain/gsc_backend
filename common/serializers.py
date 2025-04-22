@@ -19,7 +19,7 @@ class CitySerializer(ModelSerializer):
 class EducationPlaceSerializer(ModelSerializer):
     class Meta:
         model = EducationPlace
-        fields = ['id', 'city' ,'name', 'description', 'is_for_admission']
+        fields = '__all__'
 
 
 class AcademicRequirementSerializer(ModelSerializer):
@@ -34,10 +34,9 @@ class SpecialtyGroupSerializer(ModelSerializer):
 
 class ProgramSerializer(ModelSerializer):
     academic_requirements = AcademicRequirementSerializer(many=True, read_only=True)
-    university_rating = SerializerMethodField()
+    education_place = EducationPlaceSerializer(read_only=True)
+    
     class Meta:
         model = Program
         fields = '__all__'
 
-    def get_university_rating(self, obj):
-        return str(obj.education_place.rating)
