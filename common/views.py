@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .constants import LANGUAGE_TR, FORMAT_TR, DEGREE_TR
+from .constants import LANGUAGE_TR, FORMAT_TR, DEGREE_TR, CERTS
 from .filters import ProgramFilter
 from .models import Country, City, EducationPlace, Program, SpecialtyGroup
 from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerializer, ProgramSerializer, \
@@ -27,6 +27,7 @@ class RosterView(APIView):
             'languages': LANGUAGE_TR,
             'degrees': DEGREE_TR,
             'formats': FORMAT_TR,
+            'certificates': CERTS,
         })
 
 

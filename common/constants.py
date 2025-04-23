@@ -48,3 +48,13 @@ DEGREE_TR = [
     {'id': DegreeChoices.phd,
      'name': 'Докторантура'},
 ]
+
+CERTS = [
+    {'id': 'IELTS', 'name': 'IELTS'},
+    {'id': 'TOEFL', 'name': 'TOEFL'},
+    {'id': 'DUOLINGO', 'name': 'DUOLINGO'},
+    {'id': 'GRE', 'name': 'GRE'},
+    {'id': 'GPA', 'name': 'GPA'},
+    {'id': 'GMAT', 'name': 'GMAT'},
+    {'id': 'SAT', 'name': 'SAT'},
+]
