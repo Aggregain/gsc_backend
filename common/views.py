@@ -79,7 +79,7 @@ class ProgramListApiView(ListAPIView):
                 "education_place__city__id"),
             'names': base_queryset.order_by("name").
             values_list("name", flat=True).distinct("name"),
-            'specialty_groups': filtered_queryset.exclude(specialities__specialty_group__id__isnull=True).order_by(
+            'specialty_groups': base_queryset.exclude(specialities__specialty_group__id__isnull=True).order_by(
                 "specialities__specialty_group__id").values_list("specialities__specialty_group__id",
                                                                  flat=True).distinct(
                 "specialities__specialty_group__id"),
