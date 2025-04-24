@@ -129,5 +129,9 @@ class ProgramListApiView(ListAPIView):
             case 'formats':
                 return qs.exclude(format__isnull=True).order_by("format").values_list("format",
                                                                                       flat=True).distinct("format")
+            case 'certificates':
+                return qs.exclude(academic_requirements__name__isnull=True).order_by(
+                "academic_requirements__name").values_list("academic_requirements__name", flat=True).distinct(
+                "academic_requirements__name")
             case _:
                 return []
