@@ -135,3 +135,4 @@ class ProgramListApiView(ListAPIView):
                 "academic_requirements__name")
             case _:
                 return []
+
