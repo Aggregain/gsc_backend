@@ -1,5 +1,5 @@
 from django.db.models import Max, Min
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +8,7 @@ from .constants import LANGUAGE_TR, FORMAT_TR, DEGREE_TR, CERTS
 from .filters import ProgramFilter
 from .models import Country, City, EducationPlace, Program, SpecialtyGroup
 from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerializer, ProgramSerializer, \
-    SpecialtyGroupSerializer
+    SpecialtyGroupSerializer, ProgramBaseSerializer
 
 
 class RosterView(APIView):
@@ -48,91 +48,66 @@ class ProgramListApiView(ListAPIView):
         .filter(education_place__is_for_admission=True).order_by("name")
     )
 
-    serializer_class = ProgramSerializer
+    serializer_class = ProgramBaseSerializer
     filterset_class = ProgramFilter
     ordering_fields = "__all__"
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
-    # permission_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
     def list(self, request, *args, **kwargs):
         base_queryset = self.get_queryset()
-        filtered_queryset = self.filter_queryset(base_queryset)
+        filtered_queryset = self.filter_queryset(base_queryset).order_by('education_place__name')
         serializer = self.get_serializer(filtered_queryset, many=True)
-        params = request.query_params
 
-        agg_data = filtered_queryset.aggregate(
+        agg_data = base_queryset.aggregate(
             max_price=Max('price'),
             min_price=Min('price'),
             deadline_min=Min('admission_deadline'),
             deadline_max=Max('admission_deadline'),
         )
         filters = {
-            'countries': filtered_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
+            'countries': base_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
                 "education_place__city__country__id").values_list("education_place__city__country__id",
                                                                   flat=True).distinct(
                 "education_place__city__country__id"),
             'cities': filtered_queryset.exclude(education_place__city__id__isnull=True).order_by(
                 "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
                 "education_place__city__id"),
-            'names': filtered_queryset.order_by("name").
+            'names': base_queryset.order_by("name").
             values_list("name", flat=True).distinct("name"),
             'specialty_groups': filtered_queryset.exclude(specialities__specialty_group__id__isnull=True).order_by(
                 "specialities__specialty_group__id").values_list("specialities__specialty_group__id",
                                                                  flat=True).distinct(
                 "specialities__specialty_group__id"),
-            'languages': filtered_queryset.exclude(language__isnull=True).order_by("language").
+            'languages': base_queryset.exclude(language__isnull=True).order_by("language").
             values_list("language", flat=True).distinct("language"),
             'deadlines': {'max': agg_data['deadline_max'] or 0,
                           'min': agg_data['deadline_min'] or 0},
             'prices': {'min': agg_data['min_price'] or 0,
                        'max': agg_data['max_price'] or 0},
-            'formats': filtered_queryset.exclude(format__isnull=True).order_by("format").values_list("format",
+            'formats': base_queryset.exclude(format__isnull=True).order_by("format").values_list("format",
                                                                                                      flat=True).
             distinct("format"),
 
-            'certificates': filtered_queryset.exclude(academic_requirements__name__isnull=True).order_by(
+            'certificates': base_queryset.exclude(academic_requirements__name__isnull=True).order_by(
                 "academic_requirements__name").values_list("academic_requirements__name", flat=True).distinct(
                 "academic_requirements__name"),
 
         }
-        for param in params:
-            if filters.get(param):
-                filters[param] = self._get_all_vals_for_field(base_queryset, param)
 
         response_data = Response(data={'programs': serializer.data, 'filters': filters})
         return response_data
 
-    @staticmethod
-    def _get_all_vals_for_field(qs, field):
-        match field:
-            case "countries":
-                return qs.exclude(education_place__city__country__id__isnull=True).order_by(
-                    "education_place__city__country__id").values_list("education_place__city__country__id",
-                                                                      flat=True).distinct(
-                    "education_place__city__country__id")
-            case 'cities':
-                return qs.exclude(education_place__city__id__isnull=True).order_by(
-                    "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
-                    "education_place__city__id")
-            case 'names':
-                return qs.order_by("name").values_list("name", flat=True).distinct("name")
-            case 'specialty_groups':
-                return qs.exclude(specialities__specialty_group__id__isnull=True).order_by(
-                    "specialities__specialty_group__id").values_list("specialities__specialty_group__id",
-                                                                     flat=True).distinct(
-                    "specialities__specialty_group__id")
-            case 'languages':
-                return qs.exclude(language__isnull=True).order_by("language").values_list("language",
-                                                                                          flat=True).distinct(
-                    "language")
-            case 'formats':
-                return qs.exclude(format__isnull=True).order_by("format").values_list("format",
-                                                                                      flat=True).distinct("format")
-            case 'certificates':
-                return qs.exclude(academic_requirements__name__isnull=True).order_by(
-                "academic_requirements__name").values_list("academic_requirements__name", flat=True).distinct(
-                "academic_requirements__name")
-            case _:
-                return []
 
+
+
+
+class UniversityRetrieveApiView(RetrieveAPIView):
+    queryset = (EducationPlace.objects.
+                select_related('city', 'city__country').
+                prefetch_related('degrees','expenses', 'specialities', 'deadlines', 'specialities__specialty_group').
+                filter(is_for_admission=True))
+    serializer_class = EducationPlaceSerializer
+    permission_classes = [IsAuthenticated,]
+    # permission_classes = [AllowAny, ]

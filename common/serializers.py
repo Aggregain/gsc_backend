@@ -16,10 +16,23 @@ class CitySerializer(ModelSerializer):
         fields = ['id', 'country', 'name']
 
 
+class ProgramBaseSerializer(ModelSerializer):
+
+    class Meta:
+        model = Program
+        fields = '__all__'
+
 class EducationPlaceSerializer(ModelSerializer):
+
     class Meta:
         model = EducationPlace
         fields = '__all__'
+
+class EducationPlaceDetailSerializer(EducationPlaceSerializer):
+    programs = ProgramBaseSerializer(many=True, read_only=True, source='degrees')
+    class Meta(EducationPlaceSerializer.Meta):
+        ...
+
 
 
 class AcademicRequirementSerializer(ModelSerializer):
@@ -32,11 +45,10 @@ class SpecialtyGroupSerializer(ModelSerializer):
         model = SpecialtyGroup
         fields = '__all__'
 
-class ProgramSerializer(ModelSerializer):
+class ProgramSerializer(ProgramBaseSerializer):
     academic_requirements = AcademicRequirementSerializer(many=True, read_only=True)
     education_place = EducationPlaceSerializer(read_only=True)
     
-    class Meta:
-        model = Program
-        fields = '__all__'
+    class Meta(ProgramBaseSerializer.Meta):
+        ...
 
