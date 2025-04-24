@@ -16,16 +16,19 @@ class CitySerializer(ModelSerializer):
         fields = ['id', 'country', 'name']
 
 
-class ProgramBaseSerializer(ModelSerializer):
 
-    class Meta:
-        model = Program
-        fields = '__all__'
 
 class EducationPlaceSerializer(ModelSerializer):
 
     class Meta:
         model = EducationPlace
+        fields = '__all__'
+
+
+class ProgramBaseSerializer(ModelSerializer):
+    education_place = EducationPlaceSerializer(read_only=True)
+    class Meta:
+        model = Program
         fields = '__all__'
 
 class EducationPlaceDetailSerializer(EducationPlaceSerializer):

@@ -59,19 +59,22 @@ class ProgramListApiView(ListAPIView):
         base_queryset = self.get_queryset()
         filtered_queryset = self.filter_queryset(base_queryset).order_by('education_place__name')
         serializer = self.get_serializer(filtered_queryset, many=True)
-
+        params = request.query_params
         agg_data = base_queryset.aggregate(
             max_price=Max('price'),
             min_price=Min('price'),
             deadline_min=Min('admission_deadline'),
             deadline_max=Max('admission_deadline'),
         )
+        is_countries_selected = 'countries' in params
         filters = {
             'countries': base_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
                 "education_place__city__country__id").values_list("education_place__city__country__id",
                                                                   flat=True).distinct(
                 "education_place__city__country__id"),
             'cities': filtered_queryset.exclude(education_place__city__id__isnull=True).order_by(
+                "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
+                "education_place__city__id") if is_countries_selected else base_queryset.exclude(education_place__city__id__isnull=True).order_by(
                 "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
                 "education_place__city__id"),
             'names': base_queryset.order_by("name").
