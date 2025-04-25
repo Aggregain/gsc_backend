@@ -51,15 +51,27 @@ class ProgramListApiView(ListAPIView):
     serializer_class = ProgramBaseSerializer
     filterset_class = ProgramFilter
     ordering_fields = "__all__"
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
 
     def list(self, request, *args, **kwargs):
         base_queryset = self.get_queryset()
         filtered_queryset = self.filter_queryset(base_queryset).order_by('education_place__name')
-        serializer = self.get_serializer(filtered_queryset, many=True)
+
         params = request.query_params
+        ordering_param = params.get('ordering')
+        if ordering_param:
+            try:
+                fields = [field.strip() for field in ordering_param.split(',')]
+                ordered_queryset = filtered_queryset.order_by(*fields)
+            except Exception:
+                ordered_queryset = filtered_queryset  # fallback
+        else:
+            ordered_queryset = filtered_queryset
+        serializer = self.get_serializer(ordered_queryset, many=True)
+
+
         agg_data = base_queryset.aggregate(
             max_price=Max('price'),
             min_price=Min('price'),
