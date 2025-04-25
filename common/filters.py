@@ -1,5 +1,5 @@
 import django_filters
-
+from django.db import models
 from common.models import Program
 
 
@@ -74,5 +74,29 @@ class ProgramFilter(django_filters.FilterSet):
             # 'certificates_grades',
         ]
 
+    def filter_queryset(self, queryset):
+        is_countries_selected = False
+        countries_qs = None
+        for name, value in self.form.cleaned_data.items():
+            match name:
+                case 'countries':
+                    queryset = self.filters[name].filter(queryset, value)
+                    countries_qs = queryset
+                    if value:
+                        is_countries_selected = True
+                case 'cities':
+                    queryset = self.filters[name].filter(queryset, value)
+                    if not queryset and is_countries_selected:
+                        queryset = countries_qs
+                case _:
+                    queryset = self.filters[name].filter(queryset, value)
 
+            assert isinstance(
+                queryset, models.QuerySet
+            ), "Expected '%s.%s' to return a QuerySet, but got a %s instead." % (
+                type(self).__name__,
+                name,
+                type(queryset).__name__,
+            )
+        return queryset
 

@@ -1,5 +1,4 @@
-
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer
 
 from .models import City, Country, EducationPlace, Program, AcademicRequirement, SpecialtyGroup
 
@@ -7,7 +6,7 @@ from .models import City, Country, EducationPlace, Program, AcademicRequirement,
 class CountrySerializer(ModelSerializer):
     class Meta:
         model = Country
-        fields = ['id', 'name',]
+        fields = ['id', 'name', ]
 
 
 class CitySerializer(ModelSerializer):
@@ -16,26 +15,24 @@ class CitySerializer(ModelSerializer):
         fields = ['id', 'country', 'name']
 
 
-
-
 class EducationPlaceSerializer(ModelSerializer):
-
     class Meta:
         model = EducationPlace
         fields = '__all__'
 
 
 class ProgramBaseSerializer(ModelSerializer):
-    education_place = EducationPlaceSerializer(read_only=True)
+
     class Meta:
         model = Program
         fields = '__all__'
 
+
 class EducationPlaceDetailSerializer(EducationPlaceSerializer):
     programs = ProgramBaseSerializer(many=True, read_only=True, source='degrees')
+
     class Meta(EducationPlaceSerializer.Meta):
         ...
-
 
 
 class AcademicRequirementSerializer(ModelSerializer):
@@ -43,15 +40,16 @@ class AcademicRequirementSerializer(ModelSerializer):
         model = AcademicRequirement
         fields = '__all__'
 
+
 class SpecialtyGroupSerializer(ModelSerializer):
     class Meta:
         model = SpecialtyGroup
         fields = '__all__'
 
+
 class ProgramSerializer(ProgramBaseSerializer):
     academic_requirements = AcademicRequirementSerializer(many=True, read_only=True)
     education_place = EducationPlaceSerializer(read_only=True)
-    
+
     class Meta(ProgramBaseSerializer.Meta):
         ...
-

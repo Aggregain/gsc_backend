@@ -8,7 +8,7 @@ from .constants import LANGUAGE_TR, FORMAT_TR, DEGREE_TR, CERTS
 from .filters import ProgramFilter
 from .models import Country, City, EducationPlace, Program, SpecialtyGroup
 from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerializer, ProgramSerializer, \
-    SpecialtyGroupSerializer, ProgramBaseSerializer
+    SpecialtyGroupSerializer, EducationPlaceDetailSerializer
 
 
 class RosterView(APIView):
@@ -48,17 +48,17 @@ class ProgramListApiView(ListAPIView):
         .filter(education_place__is_for_admission=True).order_by("name")
     )
 
-    serializer_class = ProgramBaseSerializer
+    serializer_class = ProgramSerializer
     filterset_class = ProgramFilter
     ordering_fields = "__all__"
     permission_classes = [IsAuthenticated]
 
     # permission_classes = [AllowAny]
 
+
     def list(self, request, *args, **kwargs):
         base_queryset = self.get_queryset()
-        filtered_queryset = self.filter_queryset(base_queryset).order_by('education_place__name')
-
+        filtered_queryset = self.filter_queryset(base_queryset)
         params = request.query_params
         ordering_param = params.get('ordering')
         if ordering_param:
@@ -122,8 +122,9 @@ class ProgramListApiView(ListAPIView):
 class UniversityRetrieveApiView(RetrieveAPIView):
     queryset = (EducationPlace.objects.
                 select_related('city', 'city__country').
-                prefetch_related('degrees','expenses', 'specialities', 'deadlines', 'specialities__specialty_group').
+                prefetch_related('degrees','expenses', 'specialities', 'deadlines',
+                                 'specialities__specialty_group').
                 filter(is_for_admission=True))
-    serializer_class = EducationPlaceSerializer
+    serializer_class = EducationPlaceDetailSerializer
     permission_classes = [IsAuthenticated,]
     # permission_classes = [AllowAny, ]
