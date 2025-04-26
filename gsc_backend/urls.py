@@ -10,6 +10,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('applications/', include('applications.urls')),
     path('common/', include('common.urls')),
+    path('wishlist/', include('wishlist.urls')),
 ]
 urlpatterns += [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),

@@ -1,6 +1,6 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer, SerializerMethodField
 
-from .models import City, Country, EducationPlace, Program, AcademicRequirement, SpecialtyGroup
+from .models import City, Country, EducationPlace, Program, AcademicRequirement, SpecialtyGroup, Deadline, Expense
 
 
 class CountrySerializer(ModelSerializer):
@@ -14,23 +14,42 @@ class CitySerializer(ModelSerializer):
         model = City
         fields = ['id', 'country', 'name']
 
+class DeadlineSerializer(ModelSerializer):
+    class Meta:
+        model = Deadline
+        fields = '__all__'
 
 class EducationPlaceSerializer(ModelSerializer):
     class Meta:
         model = EducationPlace
-        fields = '__all__'
+    city_name = SerializerMethodField()
+    country_name = SerializerMethodField()
+
+    class Meta:
+        model = EducationPlace
+        exclude = ['city', ]
+
+    def get_city_name(self, obj):
+        return obj.city.name
+
+    def get_country_name(self, obj):
+        return obj.city.country.name
 
 
 class ProgramBaseSerializer(ModelSerializer):
-
     class Meta:
         model = Program
         fields = '__all__'
 
+class ExpensesSerializer(ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = '__all__'
 
 class EducationPlaceDetailSerializer(EducationPlaceSerializer):
     programs = ProgramBaseSerializer(many=True, read_only=True, source='degrees')
-
+    deadlines = DeadlineSerializer(many=True)
+    expenses = ExpensesSerializer(many=True)
     class Meta(EducationPlaceSerializer.Meta):
         ...
 

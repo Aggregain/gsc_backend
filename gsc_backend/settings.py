@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'common.apps.CommonConfig',
     'applications.apps.ApplicationsConfig',
+    'wishlist.apps.WishlistConfig',
+    'notifications.apps.NotificationsConfig',
 ]
 
 REST_AUTH = {
@@ -227,6 +229,7 @@ REST_FRAMEWORK = {
                                 'rest_framework.filters.OrderingFilter',),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DATE_FORMAT': "%d/%m/%Y",
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 
 }
 

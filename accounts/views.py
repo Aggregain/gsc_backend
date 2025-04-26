@@ -2,9 +2,9 @@ import json
 
 import requests
 from django.contrib.auth import get_user_model
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -75,7 +75,6 @@ class CreateAccountView(generics.CreateAPIView):
 
 
 class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = serializers.AccountSerializer
     def get_object(self):
         return self.request.user
@@ -83,7 +82,7 @@ class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
 
 class AvatarEditView(generics.UpdateAPIView):
     serializer_class = serializers.AvatarEditSerializer
-    permission_classes = [IsAuthenticated]
+
 
     def get_object(self):
         return self.request.user

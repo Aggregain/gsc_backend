@@ -1,6 +1,6 @@
 from django.db.models import Max, Min
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -44,6 +44,7 @@ class ProgramListApiView(ListAPIView):
             "specialities",
             "education_place__deadlines",
             "academic_requirements",
+            "experience_requirements",
         )
         .filter(education_place__is_for_admission=True).order_by("name")
     )
@@ -51,7 +52,6 @@ class ProgramListApiView(ListAPIView):
     serializer_class = ProgramSerializer
     filterset_class = ProgramFilter
     ordering_fields = "__all__"
-    permission_classes = [IsAuthenticated]
 
     # permission_classes = [AllowAny]
 
@@ -126,5 +126,5 @@ class UniversityRetrieveApiView(RetrieveAPIView):
                                  'specialities__specialty_group').
                 filter(is_for_admission=True))
     serializer_class = EducationPlaceDetailSerializer
-    permission_classes = [IsAuthenticated,]
+
     # permission_classes = [AllowAny, ]
