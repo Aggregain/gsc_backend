@@ -100,15 +100,15 @@ class SpecialtyGroup(BaseModel):
 class Specialty(BaseModel):
     name = models.CharField(max_length=255, verbose_name='название специальности')
     education_place = models.ForeignKey(EducationPlace, on_delete=models.PROTECT,
-                                        verbose_name='учебное заведение', related_name='specialities')
+                                        verbose_name='учебное заведение', related_name='specialties')
     description = RichTextField(verbose_name='описание', null=True, blank=True)
 
     specialty_group = models.ForeignKey(SpecialtyGroup, on_delete=models.PROTECT, verbose_name='группа',
-                                        related_name='specialities')
+                                        related_name='specialties')
     admission_deadline = models.DateField(null=True, blank=True, verbose_name='дедлайн подачи')
     price = models.DecimalField(max_digits=5, decimal_places=2, null=True,
                                 blank=True, verbose_name='стоимость обучения')
-    program = models.ForeignKey(Program, verbose_name='программа', related_name='specialities',
+    program = models.ForeignKey(Program, verbose_name='программа', related_name='specialties',
                                 on_delete=models.PROTECT)
     duration = models.PositiveIntegerField(verbose_name='длительность(лет)')
 
