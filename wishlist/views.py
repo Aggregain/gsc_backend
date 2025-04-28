@@ -1,32 +1,29 @@
 from django.db.utils import IntegrityError
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
 
 from accounts.permissions import IsOwnerOrAdminPermission
 from .models import WishlistItem
 from .serializers import WishlistItemSerializer, WishlistItemCreateSerializer
 
 
-class QuerySetMixin(GenericAPIView):
+class WishListView(ListAPIView):
+    serializer_class = WishlistItemSerializer
+
     def get_queryset(self):
         return (WishlistItem.objects.select_related('account',
-                                                    'program',
-                                                    'program__education_place',
-                                                    'program__education_place__city',
-                                                    'program__education_place__city__country',
+                                                    'education_place',
+                                                    'education_place__city',
+                                                    'education_place__city__country',
 
-                                                    ).prefetch_related('program__academic_requirements',
-                                                                       'program__education_place__expenses',
-                                                                       'program__education_place__deadlines')
+
+                                                    ).prefetch_related('education_place__deadlines',
+                                                                       'education_place__degrees',
+                                                                       'education_place__expenses')
                 .filter(account=self.request.user))
 
 
-
-class WishListView(QuerySetMixin, ListAPIView):
-    serializer_class = WishlistItemSerializer
-
-
-class WishAddView(QuerySetMixin, CreateAPIView):
+class WishAddView(CreateAPIView):
     serializer_class = WishlistItemCreateSerializer
 
     def perform_create(self, serializer):
@@ -35,5 +32,6 @@ class WishAddView(QuerySetMixin, CreateAPIView):
         except IntegrityError as e:
             raise ValidationError({"detail": "Database integrity error.", "error": str(e)})
 
-class WishDeleteView(QuerySetMixin, DestroyAPIView):
+
+class WishDeleteView(DestroyAPIView):
     permission_classes = [IsOwnerOrAdminPermission, ]
