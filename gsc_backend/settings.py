@@ -280,7 +280,10 @@ UNFOLD = {
 
 
 #TODO
+# applications
+# notifications
 # phone number validation
+# fix bug with city options in filters
 # media validation
 # db indexing
 # caching
@@ -288,6 +291,6 @@ UNFOLD = {
 # setting up nginx and ssl
 # google login
 # reset password
-#
+
 
 

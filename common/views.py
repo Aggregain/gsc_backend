@@ -39,7 +39,7 @@ class ProgramListApiView(ListAPIView):
             "education_place__city__country",
         )
         .prefetch_related(
-            "specialities__specialty_group",
+            "specialties__specialty_group",
             "academic_requirements",
             "specialties",
             "expenses",
@@ -56,7 +56,7 @@ class ProgramListApiView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         base_queryset = self.get_queryset()
-        filtered_queryset = self.filter_queryset(base_queryset)
+        filtered_queryset, countries_qs = self.filter_queryset(base_queryset)
         params = request.query_params
         ordering_param = params.get('ordering')
         if ordering_param:
@@ -75,14 +75,14 @@ class ProgramListApiView(ListAPIView):
             deadline_min=Min('admission_deadline'),
             deadline_max=Max('admission_deadline'),
         )
-        is_countries_selected = 'countries' in request.query_params
-#
+        is_countries_selected = bool(countries_qs)
+
         filters = {
             'countries': base_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
                 "education_place__city__country__id").values_list("education_place__city__country__id",
                                                                   flat=True).distinct(
                 "education_place__city__country__id"),
-            'cities': filtered_queryset.exclude(education_place__city__id__isnull=True).order_by(
+            'cities': countries_qs.exclude(education_place__city__id__isnull=True).order_by(
                 "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
                 "education_place__city__id") if is_countries_selected else base_queryset.exclude(
                 education_place__city__id__isnull=True).order_by(
@@ -90,7 +90,7 @@ class ProgramListApiView(ListAPIView):
                 "education_place__city__id"),
             'names': base_queryset.order_by("name").
             values_list("name", flat=True).distinct("name"),
-            'specialty_groups': base_queryset.exclude(specialities__specialty_group__id__isnull=True).order_by(
+            'specialty_groups': base_queryset.exclude(specialties__specialty_group__id__isnull=True).order_by(
                 "specialties__specialty_group__id").values_list("specialties__specialty_group__id",
                                                                  flat=True).distinct(
                 "specialties__specialty_group__id"),

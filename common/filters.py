@@ -75,18 +75,16 @@ class ProgramFilter(django_filters.FilterSet):
         ]
 
     def filter_queryset(self, queryset):
-        is_countries_selected = False
         countries_qs = None
         for name, value in self.form.cleaned_data.items():
             match name:
                 case 'countries':
                     queryset = self.filters[name].filter(queryset, value)
                     countries_qs = queryset
-                    if value:
-                        is_countries_selected = True
+
                 case 'cities':
                     queryset = self.filters[name].filter(queryset, value)
-                    if not queryset and is_countries_selected:
+                    if not queryset and countries_qs:
                         queryset = countries_qs
                 case _:
                     queryset = self.filters[name].filter(queryset, value)
@@ -98,5 +96,5 @@ class ProgramFilter(django_filters.FilterSet):
                 name,
                 type(queryset).__name__,
             )
-        return queryset
+        return queryset, countries_qs
 
