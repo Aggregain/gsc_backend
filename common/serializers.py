@@ -80,7 +80,7 @@ class ProgramDetailSerializer(ProgramBaseSerializer):
 
 class EducationPlaceDetailSerializer(EducationPlaceSerializer):
     programs = ProgramDetailSerializer(many=True, read_only=True, source='degrees')
-    specialties = SpecialtySerializer(many=True, read_only=True)
+    specialties = SpecialtySerializer(many=True, read_only=True, source='specialities')
     class Meta(EducationPlaceSerializer.Meta):
         ...
 
