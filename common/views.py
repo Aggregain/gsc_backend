@@ -44,7 +44,6 @@ class ProgramListApiView(ListAPIView):
             "specialities",
             "education_place__deadlines",
             "academic_requirements",
-            "experience_requirements",
         )
         .filter(education_place__is_for_admission=True).order_by("name")
     )

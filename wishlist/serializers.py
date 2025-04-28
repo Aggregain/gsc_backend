@@ -1,11 +1,13 @@
 
 
 from rest_framework.serializers import ModelSerializer
+
+from common.serializers import EducationPlaceSerializer
 from .models import WishlistItem
-from common.serializers import ProgramSerializer
+
 
 class WishlistItemSerializer(ModelSerializer):
-    program = ProgramSerializer(read_only=True)
+    education_place = EducationPlaceSerializer(read_only=True)
     class Meta:
         model = WishlistItem
         exclude = ['account', ]
