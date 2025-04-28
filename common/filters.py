@@ -15,7 +15,7 @@ class ProgramFilter(django_filters.FilterSet):
         label='Город (название)'
     )
     names = django_filters.BaseInFilter(field_name='name', lookup_expr='in', label='название программы')
-    specialty_groups = django_filters.BaseInFilter(field_name='specialities__specialty_group__id', lookup_expr='in',
+    specialty_groups = django_filters.BaseInFilter(field_name='specialties__specialty_group__id', lookup_expr='in',
                                                    label='группы специальностей')
     languages = django_filters.BaseInFilter(field_name='language', lookup_expr='in', label='язык обучения')
     admission_deadline_before = django_filters.DateFilter(
