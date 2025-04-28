@@ -278,4 +278,16 @@ UNFOLD = {
     "THEME": "dark",
 }
 
+
 #TODO
+# phone number validation
+# media validation
+# db indexing
+# caching
+# query optimization for views and admin
+# setting up nginx and ssl
+# google login
+# reset password
+#
+
+

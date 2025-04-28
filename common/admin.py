@@ -51,7 +51,7 @@ class CityAdmin(ModelAdmin):
 
 class SpecialtyInline(TabularInline):
     fields = ('name',  'program', 'specialty_group', 'duration', 'price', 'admission_deadline',
-              'edit_link')
+              'education_place','edit_link')
     model = Specialty
     extra = 0
     readonly_fields = ('edit_link',)
