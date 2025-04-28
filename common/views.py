@@ -41,7 +41,7 @@ class ProgramListApiView(ListAPIView):
         .prefetch_related(
             "specialities__specialty_group",
             "academic_requirements",
-            "specialities",
+            "specialties",
             "expenses",
             "deadlines"
         )
@@ -91,9 +91,9 @@ class ProgramListApiView(ListAPIView):
             'names': base_queryset.order_by("name").
             values_list("name", flat=True).distinct("name"),
             'specialty_groups': base_queryset.exclude(specialities__specialty_group__id__isnull=True).order_by(
-                "specialities__specialty_group__id").values_list("specialities__specialty_group__id",
+                "specialties__specialty_group__id").values_list("specialties__specialty_group__id",
                                                                  flat=True).distinct(
-                "specialities__specialty_group__id"),
+                "specialties__specialty_group__id"),
             'languages': base_queryset.exclude(language__isnull=True).order_by("language").
             values_list("language", flat=True).distinct("language"),
             'deadlines': {'max': agg_data['deadline_max'] or 0,
@@ -119,9 +119,9 @@ class UniversityRetrieveApiView(RetrieveAPIView):
 
     queryset = (EducationPlace.objects.
                 select_related('city', 'city__country').
-                prefetch_related('degrees', 'specialities', 'degrees__academic_requirements',
+                prefetch_related('degrees', 'specialties', 'degrees__academic_requirements',
                                  'degrees__deadlines', 'degrees__expenses',
-                                 'specialities__specialty_group', 'specialities__specialty_group',
-                                 'specialities__program').
+                                 'specialities__specialty_group', 'specialties__specialty_group',
+                                 'specialties__program').
                 filter(is_for_admission=True))
     # permission_classes = [AllowAny, ]
