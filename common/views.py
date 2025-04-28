@@ -76,7 +76,7 @@ class ProgramListApiView(ListAPIView):
             deadline_max=Max('admission_deadline'),
         )
         is_countries_selected = 'countries' in request.query_params
-
+#
         filters = {
             'countries': base_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
                 "education_place__city__country__id").values_list("education_place__city__country__id",
