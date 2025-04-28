@@ -121,7 +121,7 @@ class UniversityRetrieveApiView(RetrieveAPIView):
                 select_related('city', 'city__country').
                 prefetch_related('degrees', 'specialties', 'degrees__academic_requirements',
                                  'degrees__deadlines', 'degrees__expenses',
-                                 'specialities__specialty_group', 'specialties__specialty_group',
+                                 'specialties__specialty_group', 'specialties__specialty_group',
                                  'specialties__program').
                 filter(is_for_admission=True))
     # permission_classes = [AllowAny, ]
