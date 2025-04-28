@@ -1,15 +1,14 @@
 from django.db.utils import IntegrityError
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, GenericAPIView
 
 from accounts.permissions import IsOwnerOrAdminPermission
 from .models import WishlistItem
 from .serializers import WishlistItemSerializer, WishlistItemCreateSerializer
 
 
-class WishListView(ListAPIView):
-    serializer_class = WishlistItemSerializer
 
+class QuerySetMixin(GenericAPIView):
     def get_queryset(self):
         return (WishlistItem.objects.select_related('account',
                                                     'education_place',
@@ -21,6 +20,10 @@ class WishListView(ListAPIView):
                                                                        'education_place__degrees',
                                                                        'education_place__expenses')
                 .filter(account=self.request.user))
+class WishListView(QuerySetMixin, ListAPIView):
+    serializer_class = WishlistItemSerializer
+
+
 
 
 class WishAddView(CreateAPIView):
@@ -33,5 +36,5 @@ class WishAddView(CreateAPIView):
             raise ValidationError({"detail": "Database integrity error.", "error": str(e)})
 
 
-class WishDeleteView(DestroyAPIView):
+class WishDeleteView(QuerySetMixin, DestroyAPIView):
     permission_classes = [IsOwnerOrAdminPermission, ]
