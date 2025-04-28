@@ -43,7 +43,10 @@ class EducationPlace(BaseModel):
                             unique=True)
     logo = models.ImageField(null=True, blank=True, verbose_name='лого', upload_to=education_place_path)
     image = models.ImageField(null=True, blank=True, verbose_name='фото ВУЗа', upload_to=education_place_path)
-    description = RichTextField(null=True, blank=True, verbose_name='описание')
+    general_description = RichTextField(null=True, blank=True, verbose_name='основное описание')
+    campus_description = RichTextField(null=True, blank=True, verbose_name='описание кампуса')
+    scholarship_description = RichTextField(verbose_name='описание стипендии', null=True, blank=True)
+    link = models.URLField(null=True, blank=True, verbose_name='ссылка на страницу ВУЗа')
     rating = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, verbose_name='рейтинг')
     foundation_date = models.DateField(null=True, blank=True, verbose_name='Дата основания')
     prices_data = models.JSONField(null=True, blank=True, verbose_name='цены')
@@ -63,7 +66,6 @@ class Program(BaseModel):
                                         on_delete=models.PROTECT)
     description_general = RichTextField(verbose_name='описание общее', null=True, blank=True)
     description_academic = RichTextField(verbose_name='описание академ требований', null=True, blank=True)
-    description_scholarship = RichTextField(verbose_name='описание стипендии', null=True, blank=True)
     description_prices = RichTextField(verbose_name='описание цен', null=True, blank=True)
 
     duration_years = models.PositiveIntegerField(verbose_name='Длительность обучения(лет)')
@@ -103,6 +105,9 @@ class Specialty(BaseModel):
 
     specialty_group = models.ForeignKey(SpecialtyGroup, on_delete=models.PROTECT, verbose_name='группа',
                                         related_name='specialities')
+    admission_deadline = models.DateField(null=True, blank=True, verbose_name='дедлайн подачи')
+    price = models.DecimalField(max_digits=5, decimal_places=2, null=True,
+                                blank=True, verbose_name='стоимость обучения')
     program = models.ForeignKey(Program, verbose_name='программа', related_name='specialities',
                                 on_delete=models.PROTECT)
     duration = models.PositiveIntegerField(verbose_name='длительность(лет)')
@@ -117,7 +122,8 @@ class Specialty(BaseModel):
 
 
 class Deadline(BaseModel):
-    education_place = models.ForeignKey(EducationPlace, verbose_name='учебное заведение', related_name='deadlines',
+
+    program = models.ForeignKey(Program, verbose_name='программа', related_name='deadlines',
                                         on_delete=models.CASCADE)
     name = models.CharField(max_length=255,
                             verbose_name='название дедлайна',)
@@ -129,12 +135,13 @@ class Deadline(BaseModel):
     class Meta:
         verbose_name = 'дедлайн'
         verbose_name_plural = 'дедлайны'
-        unique_together = ('education_place', 'name')
+        unique_together = ('program', 'name')
 
 
 class Expense(BaseModel):
-    education_place = models.ForeignKey(EducationPlace, verbose_name='учебное заведение', related_name='expenses',
-                                        on_delete=models.CASCADE)
+
+    program = models.ForeignKey(Program, verbose_name='программа', related_name='expenses',
+                                on_delete=models.CASCADE)
     name = models.CharField(max_length=255, verbose_name='тип расходов')
     price_per_year_text = models.CharField(max_length=255, verbose_name='цена')
 
@@ -144,7 +151,7 @@ class Expense(BaseModel):
     class Meta:
         verbose_name = 'расход'
         verbose_name_plural = 'расходы'
-        unique_together = ('education_place', 'name')
+        unique_together = ('program', 'name')
 
 
 class AcademicRequirement(BaseModel):

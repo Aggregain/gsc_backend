@@ -42,8 +42,8 @@ class ProgramListApiView(ListAPIView):
             "specialities__specialty_group",
             "academic_requirements",
             "specialities",
-            "education_place__deadlines",
-            "academic_requirements",
+            "expenses",
+            "deadlines"
         )
         .filter(education_place__is_for_admission=True).order_by("name")
     )
@@ -53,7 +53,6 @@ class ProgramListApiView(ListAPIView):
     ordering_fields = "__all__"
 
     # permission_classes = [AllowAny]
-
 
     def list(self, request, *args, **kwargs):
         base_queryset = self.get_queryset()
@@ -65,11 +64,10 @@ class ProgramListApiView(ListAPIView):
                 fields = [field.strip() for field in ordering_param.split(',')]
                 ordered_queryset = filtered_queryset.order_by(*fields)
             except Exception:
-                ordered_queryset = filtered_queryset  # fallback
+                ordered_queryset = filtered_queryset
         else:
             ordered_queryset = filtered_queryset
         serializer = self.get_serializer(ordered_queryset, many=True)
-
 
         agg_data = base_queryset.aggregate(
             max_price=Max('price'),
@@ -77,10 +75,8 @@ class ProgramListApiView(ListAPIView):
             deadline_min=Min('admission_deadline'),
             deadline_max=Max('admission_deadline'),
         )
-        is_countries_selected = (
-                'countries' in request.query_params or
-                'cities' in request.query_params
-        )
+        is_countries_selected = 'countries' in request.query_params
+
         filters = {
             'countries': base_queryset.exclude(education_place__city__country__id__isnull=True).order_by(
                 "education_place__city__country__id").values_list("education_place__city__country__id",
@@ -88,7 +84,8 @@ class ProgramListApiView(ListAPIView):
                 "education_place__city__country__id"),
             'cities': filtered_queryset.exclude(education_place__city__id__isnull=True).order_by(
                 "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
-                "education_place__city__id") if is_countries_selected else base_queryset.exclude(education_place__city__id__isnull=True).order_by(
+                "education_place__city__id") if is_countries_selected else base_queryset.exclude(
+                education_place__city__id__isnull=True).order_by(
                 "education_place__city__id").values_list("education_place__city__id", flat=True).distinct(
                 "education_place__city__id"),
             'names': base_queryset.order_by("name").
@@ -104,30 +101,27 @@ class ProgramListApiView(ListAPIView):
             'prices': {'min': agg_data['min_price'] or 0,
                        'max': agg_data['max_price'] or 0},
             'formats': base_queryset.exclude(format__isnull=True).order_by("format").values_list("format",
-                                                                                                     flat=True).
+                                                                                                 flat=True).
             distinct("format"),
-
 
             'certificates': base_queryset.exclude(academic_requirements__name__isnull=True).order_by(
                 "academic_requirements__name").values_list("academic_requirements__name", flat=True).distinct(
                 "academic_requirements__name"),
 
         }
-        print(filters['cities'])
-        print(is_countries_selected)
+
         response_data = Response(data={'programs': serializer.data, 'filters': filters})
         return response_data
 
 
-
-
-
 class UniversityRetrieveApiView(RetrieveAPIView):
-    queryset = (EducationPlace.objects.
-                select_related('city', 'city__country').
-                prefetch_related('degrees','expenses', 'specialities', 'deadlines',
-                                 'specialities__specialty_group').
-                filter(is_for_admission=True))
     serializer_class = EducationPlaceDetailSerializer
 
+    queryset = (EducationPlace.objects.
+                select_related('city', 'city__country').
+                prefetch_related('degrees', 'specialities', 'degrees__academic_requirements',
+                                 'degrees__deadlines', 'degrees__expenses',
+                                 'specialities__specialty_group', 'specialities__specialty_group',
+                                 'specialities__program').
+                filter(is_for_admission=True))
     # permission_classes = [AllowAny, ]

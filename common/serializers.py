@@ -1,6 +1,7 @@
-from rest_framework.serializers import ModelSerializer, Serializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from .models import City, Country, EducationPlace, Program, AcademicRequirement, SpecialtyGroup, Deadline, Expense
+from .models import City, Country, EducationPlace, Program, AcademicRequirement, SpecialtyGroup, Deadline, Expense, \
+    Specialty
 
 
 class CountrySerializer(ModelSerializer):
@@ -17,6 +18,16 @@ class CitySerializer(ModelSerializer):
 class DeadlineSerializer(ModelSerializer):
     class Meta:
         model = Deadline
+        fields = '__all__'
+
+class ExpensesSerializer(ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = '__all__'
+
+class AcademicRequirementSerializer(ModelSerializer):
+    class Meta:
+        model = AcademicRequirement
         fields = '__all__'
 
 class EducationPlaceSerializer(ModelSerializer):
@@ -41,23 +52,37 @@ class ProgramBaseSerializer(ModelSerializer):
         model = Program
         fields = '__all__'
 
-class ExpensesSerializer(ModelSerializer):
-    class Meta:
-        model = Expense
-        fields = '__all__'
 
-class EducationPlaceDetailSerializer(EducationPlaceSerializer):
-    programs = ProgramBaseSerializer(many=True, read_only=True, source='degrees')
-    deadlines = DeadlineSerializer(many=True)
-    expenses = ExpensesSerializer(many=True)
-    class Meta(EducationPlaceSerializer.Meta):
+
+class SpecialtySerializer(ModelSerializer):
+    group_name = SerializerMethodField()
+    program_name = SerializerMethodField()
+    class Meta:
+        model = Specialty
+        exclude = ['specialty_group', 'program']
+
+    def get_group_name(self, obj):
+        return obj.specialty_group.name
+
+    def get_program_name(self, obj):
+        return obj.program.name
+
+
+
+
+class ProgramDetailSerializer(ProgramBaseSerializer):
+    expenses = ExpensesSerializer(many=True, read_only=True,)
+    deadlines = DeadlineSerializer(many=True, read_only=True)
+    academic_requirements = AcademicRequirementSerializer(many=True, read_only=True)
+    class Meta(ProgramBaseSerializer.Meta):
         ...
 
 
-class AcademicRequirementSerializer(ModelSerializer):
-    class Meta:
-        model = AcademicRequirement
-        fields = '__all__'
+class EducationPlaceDetailSerializer(EducationPlaceSerializer):
+    programs = ProgramDetailSerializer(many=True, read_only=True, source='degrees')
+    specialties = SpecialtySerializer(many=True, read_only=True)
+    class Meta(EducationPlaceSerializer.Meta):
+        ...
 
 
 class SpecialtyGroupSerializer(ModelSerializer):
