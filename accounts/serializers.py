@@ -19,7 +19,7 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'second_name', 'last_name', 'email', 'avatar',
                   'degree', 'gre_grade', 'gmat_grade', 'duolingo_grade', 'sat_grade',
                   'toefl_grade', 'toefl_grade', 'ielts_grade', 'gpa_grade',
-                  'education_place', 'country', 'city', 'birth_date', 'phone_number']
+                  'education_place', 'country', 'city', 'birth_date', 'phone_number', 'password']
         read_only_fields = ['id', 'created_at', 'updated_at', 'is_staff', 'is_superuser']
         extra_kwargs = {
             'password': {

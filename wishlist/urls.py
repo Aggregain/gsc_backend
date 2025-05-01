@@ -3,7 +3,7 @@ from . import views
 app_name = 'wishlist'
 
 urlpatterns = [
-    path('items/', views.WishListView.as_view(), name='items'),
-    path('add/', views.WishAddView.as_view(), name='add'),
-    path('delete/<int:pk>', views.WishDeleteView.as_view(), name='delete'),
+    path('', views.WishlistCreateListView.as_view(), name='wishlist-create-list'),
+
+    path('<int:pk>', views.WishDeleteView.as_view(), name='wishlist-delete'),
 ]

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
-
+from applications.models import Application
 from accounts.managers import AccountManager
 from common.models import BaseModel, EducationPlace, City, Country
 from common.constants import DegreeChoices
@@ -60,7 +60,8 @@ class Attachment(BaseModel):
     name = models.CharField(max_length=255, verbose_name='название файла/сертификата', unique=True)
     file = models.FileField(upload_to=attachment_path, null=True, blank=True, verbose_name='файл')
     meta = models.JSONField(null=True, blank=True, verbose_name='дополнительно')
-
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True,
+                                    verbose_name='заявка', related_name='attachments')
     def __str__(self):
         return f'{self.name}'
 

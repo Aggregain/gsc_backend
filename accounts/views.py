@@ -76,13 +76,13 @@ class CreateAccountView(generics.CreateAPIView):
 
 class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.AccountSerializer
+
     def get_object(self):
         return self.request.user
 
 
 class AvatarEditView(generics.UpdateAPIView):
     serializer_class = serializers.AvatarEditSerializer
-
 
     def get_object(self):
         return self.request.user

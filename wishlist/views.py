@@ -7,7 +7,6 @@ from .models import WishlistItem
 from .serializers import WishlistItemSerializer, WishlistItemCreateSerializer
 
 
-
 class QuerySetMixin(GenericAPIView):
     def get_queryset(self):
         return (WishlistItem.objects.select_related('account',
@@ -15,22 +14,22 @@ class QuerySetMixin(GenericAPIView):
                                                     'education_place__city',
                                                     'education_place__city__country',
 
-
                                                     ).prefetch_related('education_place__degrees',
                                                                        'education_place__specialties',
                                                                        'education_place__degrees__academic_requirements',
                                                                        'education_place__degrees__deadlines',
                                                                        'education_place__degrees__expenses',
-)
+                                                                       )
                 .filter(account=self.request.user))
-class WishListView(QuerySetMixin, ListAPIView):
-    serializer_class = WishlistItemSerializer
 
 
-
-
-class WishAddView(CreateAPIView):
+class WishlistCreateListView(QuerySetMixin, ListAPIView, CreateAPIView):
     serializer_class = WishlistItemCreateSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return WishlistItemSerializer
+        return WishlistItemCreateSerializer
 
     def perform_create(self, serializer):
         try:
