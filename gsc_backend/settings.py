@@ -283,8 +283,7 @@ UNFOLD = {
 # applications
 # notifications
 # phone number validation
-# fix bug with city options in filters
-# media validation
+# media size validation in nginx
 # db indexing
 # caching
 # query optimization for views and admin
