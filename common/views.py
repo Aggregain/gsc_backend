@@ -3,7 +3,8 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from .constants import LANGUAGE_TR, FORMAT_TR, DEGREE_TR, CERTS
 from .filters import ProgramFilter
 from .models import Country, City, EducationPlace, Program, SpecialtyGroup
@@ -14,6 +15,7 @@ from .serializers import CountrySerializer, EducationPlaceSerializer, CitySerial
 class RosterView(APIView):
     permission_classes = [AllowAny, ]
 
+    @method_decorator(cache_page(60 * 60 * 24))
     def get(self, request):
         countries = Country.objects.all()
         cities = City.objects.select_related('country').all()

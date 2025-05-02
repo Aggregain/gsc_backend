@@ -53,25 +53,29 @@ INSTALLED_APPS = [
     'notifications.apps.NotificationsConfig',
 ]
 
-REST_AUTH = {
-    'TOKEN_MODEL': None,
-    'USE_JWT': True,
-}
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+]
+# REST_AUTH = {
+#     'TOKEN_MODEL': None,
+#     'USE_JWT': True,
+# }
 
-SITE_ID = 1
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_LOGIN_METHODS = {'email'}
-SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
-SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
-PASSWORD_RESET_USE_SITES_DOMAIN = True
+# SITE_ID = 1
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+# ACCOUNT_LOGIN_METHODS = {'email'}
+# SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+# SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+# PASSWORD_RESET_USE_SITES_DOMAIN = True
 
-BACKEND_BASE_URL = os.getenv('BACKEND_BASE_URL')
-GOOGLE_OAUTH_CALLBACK_PATH = os.getenv('GOOGLE_OAUTH_CALLBACK_PATH')
-GOOGLE_OAUTH_CALLBACK_URL = BACKEND_BASE_URL + GOOGLE_OAUTH_CALLBACK_PATH
-
-GOOGLE_SECRET_KEY = os.getenv('GOOGLE_SECRET_KEY')
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+# BACKEND_BASE_URL = os.getenv('BACKEND_BASE_URL')
+# GOOGLE_OAUTH_CALLBACK_PATH = os.getenv('GOOGLE_OAUTH_CALLBACK_PATH')
+# GOOGLE_OAUTH_CALLBACK_URL = BACKEND_BASE_URL + GOOGLE_OAUTH_CALLBACK_PATH
+#
+# GOOGLE_SECRET_KEY = os.getenv('GOOGLE_SECRET_KEY')
+# GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -81,25 +85,24 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': GOOGLE_CLIENT_ID,
-            'secret': GOOGLE_SECRET_KEY,
-            'key': ''
-        },
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP': {
+#             'client_id': GOOGLE_CLIENT_ID,
+#             'secret': GOOGLE_SECRET_KEY,
+#             'key': ''
+#         },
+#         'SCOPE': [
+#             'profile',
+#             'email',
+#         ],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     }
+# }
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -112,6 +115,8 @@ MIDDLEWARE = [
 
 ]
 
+if DEBUG:
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 ROOT_URLCONF = 'gsc_backend.urls'
 
 

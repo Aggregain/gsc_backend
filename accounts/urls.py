@@ -1,4 +1,4 @@
-from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
+# from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 from rest_framework.routers import DefaultRouter
 from django.urls import path
 from django.urls.conf import re_path
@@ -16,7 +16,7 @@ urlpatterns = [
     path('token/refresh/', views.RefreshView.as_view(), name='token_refresh'),
     path('google/', GoogleView.as_view(), name="google_login"),
     path('avatar/', views.AvatarEditView.as_view(), name="avatar"),
-    re_path(r'password/reset/?$', PasswordResetView.as_view(), name='rest_password_reset'),
-    path('password/reset/confirm/<str:uidb64>/<str:token>', PasswordResetConfirmView.as_view(),
-         name='password_reset_confirm'),
+    # re_path(r'password/reset/?$', PasswordResetView.as_view(), name='rest_password_reset'),
+    # path('password/reset/confirm/<str:uidb64>/<str:token>', PasswordResetConfirmView.as_view(),
+    #      name='password_reset_confirm'),
 ] + router.urls
