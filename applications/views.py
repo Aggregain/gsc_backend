@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotAcceptable
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView, CreateAPIView
 from rest_framework.response import Response
-from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer
+from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer, CommentSerializer
 from .constants import StatusChoices
 from .models import Application
 from rest_framework.permissions import IsAdminUser
@@ -11,13 +11,13 @@ User = get_user_model()
 
 
 class BaseApplicationMixin(GenericAPIView):
-    queryset = Application.objects.prefetch_related('attachments', ).select_related(
+    queryset = Application.objects.prefetch_related('attachments', 'comments').select_related(
         'owner', 'assignee', 'program', 'program__education_place', 'program__education_place__city',
         'program__education_place__city__country').all()
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return self.queryset
+            return self.queryset.all()
         if self.request.user.is_staff:
             return self.queryset.filter(assignee=self.request.user)
         return self.queryset.filter(owner=self.request.user)
@@ -52,3 +52,11 @@ class ApplicationListCreateAPIView(BaseApplicationMixin, ListCreateAPIView):
         ctxt = super().get_serializer_context()
         ctxt['request'] = self.request
         return ctxt
+
+
+class CommentCreateView(CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAdminUser,]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)

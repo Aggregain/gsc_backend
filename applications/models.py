@@ -24,3 +24,14 @@ class Application(BaseModel):
         verbose_name_plural = 'заявки'
 
 
+class Comment(BaseModel):
+    content = models.TextField(db_index=True)
+    owner = models.ForeignKey('accounts.Account', on_delete=models.SET_NULL,
+                              verbose_name='владелец', related_name='comments' ,
+                              null=True, blank=True)
+    application = models.ForeignKey('Application', on_delete=models.CASCADE,
+                                    verbose_name='заявка', related_name='comments')
+
+    def __str__(self):
+        return f'{self.id}'
+

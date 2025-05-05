@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from accounts.serializers import AttachmentSerializer
-from applications.models import Application
+from applications.models import Application, Comment
 from common.serializers import EducationPlaceSerializer, ProgramBaseSerializer
 from common.models import EducationPlace
 from rest_framework.exceptions import NotAcceptable
@@ -36,9 +36,15 @@ class ApplicationCreateSerializer(serializers.Serializer):
         return application
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['content', 'application']
+
 class ApplicationListSerializer(ApplicationBaseSerializer):
     attachments = AttachmentSerializer(many=True, read_only=True)
     program = ProgramBaseSerializer(read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
     education_place = serializers.SerializerMethodField()
 
     class Meta(ApplicationBaseSerializer.Meta):
@@ -52,3 +58,4 @@ class ApplicationListSerializer(ApplicationBaseSerializer):
 class ApplicationRetrieveUpdateSerializer(ApplicationBaseSerializer):
     class Meta(ApplicationBaseSerializer.Meta):
         fields = '__all__'
+
