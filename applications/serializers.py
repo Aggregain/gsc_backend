@@ -7,6 +7,7 @@ from common.models import EducationPlace
 from rest_framework.exceptions import NotAcceptable
 from .constants import StatusChoices
 
+
 class ApplicationBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
@@ -23,16 +24,15 @@ class ApplicationCreateSerializer(serializers.Serializer):
             raise NotAcceptable('Программа в профиле пользователя не выбрана')
         if not program:
             raise NotAcceptable(f'В выбранном университете отсутствует программа "{user.degree}"')
-        application = Application.objects.filter(program=program,owner=user,
-                                      status__in=[StatusChoices.draft, StatusChoices.accepted,
-                                                  StatusChoices.for_consideration, StatusChoices.for_revision,
-                                                  StatusChoices.in_progress]).first()
-        if application:
-            return application
-        application = Application.objects.create(program=program, **kwargs)
+        qs = Application.objects.filter(program=program, owner=user,
+                                        ).exclude(status=StatusChoices.denied)
 
-        application.name = f'Заявка №{application.id}'
-        application.save()
+        if qs.exists():
+            application = qs.first()
+        else:
+            application = Application.objects.create(program=program, **kwargs)
+            application.name = f'Заявка №{application.id}'
+            application.save()
         return application
 
 
