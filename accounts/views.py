@@ -93,4 +93,4 @@ class AttachmentViewSet(ModelViewSet):
     serializer_class = serializers.AttachmentSerializer
 
     def get_queryset(self):
-        return Attachment.objects.filter(account=self.request.user).order_by("-created_at")
+        return Attachment.objects.filter(account=self.request.user, application__isnull=True).order_by("-created_at")
