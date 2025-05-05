@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotAcceptable
-from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, GenericAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.response import Response
 from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer
 from .constants import StatusChoices
@@ -23,7 +23,7 @@ class BaseApplicationMixin(GenericAPIView):
         return self.queryset.filter(owner=self.request.user)
 
 
-class ApplicationRetrieveUpdateDestroyAPIView(BaseApplicationMixin, RetrieveDestroyAPIView):
+class ApplicationRetrieveUpdateDestroyAPIView(BaseApplicationMixin, RetrieveUpdateDestroyAPIView):
     serializer_class = ApplicationListSerializer
     permission_classes = [IsAdminUser,]
 
