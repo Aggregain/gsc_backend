@@ -10,7 +10,7 @@ def avatar_path(instance, filename):
 
 
 def attachment_path(instance, filename):
-    return f'attachments/{instance.account.email}/{filename}'
+    return f'attachments/{instance.account_id}/{filename}'
 
 
 class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
