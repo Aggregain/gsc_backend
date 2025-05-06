@@ -94,3 +94,6 @@ class AttachmentViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Attachment.objects.filter(account=self.request.user, application__isnull=True).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(account=self.request.user)
