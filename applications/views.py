@@ -2,6 +2,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotAcceptable
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView, CreateAPIView
 from rest_framework.response import Response
+
+from accounts import permissions
+from accounts.permissions import IsOwnerOrAdminPermission
 from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer, CommentSerializer
 from .constants import StatusChoices
 from .models import Application
@@ -25,7 +28,15 @@ class BaseApplicationMixin(GenericAPIView):
 
 class ApplicationRetrieveUpdateDestroyAPIView(BaseApplicationMixin, RetrieveUpdateDestroyAPIView):
     serializer_class = ApplicationListSerializer
-    permission_classes = [IsAdminUser,]
+
+    def get_permissions(self):
+        application = self.get_object()
+        if application.status == StatusChoices.DRAFT:
+            return [IsOwnerOrAdminPermission()]
+        return [IsAdminUser()]
+
+
+
 
 
 class ApplicationListCreateAPIView(BaseApplicationMixin, ListCreateAPIView):
@@ -43,7 +54,7 @@ class ApplicationListCreateAPIView(BaseApplicationMixin, ListCreateAPIView):
         if not superuser:
             raise NotAcceptable('Аккаунт суперпользователя не найден')
         application = serializer.save(owner=self.request.user,
-                                      status=StatusChoices.draft,
+                                      status=StatusChoices.DRAFT,
                                       assignee=superuser)
         return Response(ApplicationListSerializer(application).data, status=201)
 

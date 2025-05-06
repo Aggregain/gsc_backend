@@ -25,7 +25,7 @@ class ApplicationCreateSerializer(serializers.Serializer):
         if not program:
             raise NotAcceptable(f'В выбранном университете отсутствует программа "{user.degree}"')
         qs = Application.objects.filter(program=program, owner=user,
-                                        ).exclude(status=StatusChoices.denied)
+                                        ).exclude(status=StatusChoices.DENIED)
 
         if qs.exists():
             application = qs.first()
