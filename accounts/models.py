@@ -59,7 +59,7 @@ class Attachment(BaseModel):
                                 related_name='attachments')
     name = models.CharField(max_length=255, verbose_name='название файла/сертификата', unique=True)
     file = models.FileField(upload_to=attachment_path, null=True, blank=True, verbose_name='файл')
-    meta = models.JSONField(null=True, blank=True, verbose_name='дополнительно')
+    meta = models.CharField(null=True, blank=True, verbose_name='дополнительно', max_length=255)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True,
                                     verbose_name='заявка', related_name='attachments')
     def __str__(self):
