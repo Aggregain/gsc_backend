@@ -1,14 +1,13 @@
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotAcceptable
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView, CreateAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from accounts import permissions
-from accounts.permissions import IsOwnerOrAdminPermission
 from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer, CommentSerializer
 from .constants import StatusChoices
 from .models import Application
-from rest_framework.permissions import IsAdminUser
+from .permissions import ApplicationEditPermission
 
 User = get_user_model()
 
@@ -28,12 +27,7 @@ class BaseApplicationMixin(GenericAPIView):
 
 class ApplicationRetrieveUpdateDestroyAPIView(BaseApplicationMixin, RetrieveUpdateDestroyAPIView):
     serializer_class = ApplicationListSerializer
-
-    def get_permissions(self):
-        application = self.get_object()
-        if application.status == StatusChoices.DRAFT:
-            return [IsOwnerOrAdminPermission()]
-        return [IsAdminUser()]
+    permission_classes = [ApplicationEditPermission,]
 
 
 
