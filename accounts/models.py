@@ -69,4 +69,4 @@ class Attachment(BaseModel):
         verbose_name = 'документ'
         verbose_name_plural = 'документы'
 
-        unique_together = ('account', 'name',)
+
