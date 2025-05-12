@@ -11,7 +11,7 @@ class Application(BaseModel):
     assignee = models.ForeignKey('accounts.Account', on_delete=models.PROTECT, verbose_name='менеджер', related_name='assigned_applications')
     program = models.ForeignKey(Program, on_delete=models.PROTECT, verbose_name='программа', related_name='applications')
 
-
+    comment = models.TextField(null=True, blank=True, verbose_name='комментарий')
     status = models.CharField(max_length=255, choices=constants.StatusChoices, verbose_name='статус')
 
     def __str__(self):
@@ -24,14 +24,5 @@ class Application(BaseModel):
         verbose_name_plural = 'заявки'
 
 
-class Comment(BaseModel):
-    content = models.TextField(db_index=True)
-    owner = models.ForeignKey('accounts.Account', on_delete=models.SET_NULL,
-                              verbose_name='владелец', related_name='comments' ,
-                              null=True, blank=True)
-    application = models.ForeignKey('Application', on_delete=models.CASCADE,
-                                    verbose_name='заявка', related_name='comments')
 
-    def __str__(self):
-        return f'{self.id}'
 

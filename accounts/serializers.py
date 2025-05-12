@@ -1,8 +1,15 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Attachment
 
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['is_staff'] = self.user.is_staff
+        return data
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:

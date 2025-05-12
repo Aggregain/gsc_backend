@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-##
+
 from . import serializers
 from .models import Attachment
 from .permissions import IsOwnerOrAdminPermission
@@ -62,7 +62,7 @@ class GoogleView(APIView):
 
 
 class TokenView(TokenObtainPairView):
-    pass
+    serializer_class = serializers.CustomTokenObtainPairSerializer
 
 
 class RefreshView(TokenRefreshView):

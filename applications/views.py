@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotAcceptable
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView, CreateAPIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.response import Response
 
-from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer, CommentSerializer
+from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer
 from .constants import StatusChoices
 from .models import Application
 from .permissions import ApplicationEditPermission
@@ -13,7 +12,7 @@ User = get_user_model()
 
 
 class BaseApplicationMixin(GenericAPIView):
-    queryset = Application.objects.prefetch_related('attachments', 'comments').select_related(
+    queryset = Application.objects.prefetch_related('attachments',).select_related(
         'owner', 'assignee', 'program', 'program__education_place', 'program__education_place__city',
         'program__education_place__city__country').all()
 
@@ -59,9 +58,3 @@ class ApplicationListCreateAPIView(BaseApplicationMixin, ListCreateAPIView):
         return ctxt
 
 
-class CommentCreateView(CreateAPIView):
-    serializer_class = CommentSerializer
-    permission_classes = [IsAdminUser,]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
