@@ -10,7 +10,10 @@ from .models import Notification
 def create_notification_task(application_id, status, comment=None):
     if not comment:
         comment = 'Заявка получила новый статус'
-    application = Application.objects.get(pk=application_id)
+    try:
+        application = Application.objects.get(pk=application_id)
+    except Application.DoesNotExist:
+        return
     receiver = application.owner
     Notification.objects.create(receiver=receiver,
                                content=comment,

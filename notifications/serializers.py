@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 
 from applications.models import Application
+from applications.serializers import ApplicationRetrieveUpdateSerializer
 from notifications.models import Notification
 
 
@@ -15,7 +16,7 @@ class NotificationSerializer(serializers.Serializer):
 
 
 class NotificationListSerializer(serializers.ModelSerializer):
-
+    application = ApplicationRetrieveUpdateSerializer(read_only=True)
     class Meta:
         model = Notification
         fields = '__all__'
