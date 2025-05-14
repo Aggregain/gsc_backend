@@ -7,12 +7,16 @@ from notifications.models import Notification
 
 
 class NotificationSerializer(serializers.Serializer):
-    application_id = serializers.IntegerField(required=True)
+    application_id = serializers.IntegerField(required=False)
 
     def save(self, **kwargs):
-        application_id = self.validated_data['application_id']
-        application = get_object_or_404(Application, pk=application_id)
-        application.notifications.all().update(is_seen=True)
+        application_id = self.validated_data.get('application_id')
+        if application_id:
+            application = get_object_or_404(Application, pk=application_id)
+            application.notifications.all().update(is_seen=True)
+        else:
+            user = self.context['request'].user
+            user.notifications.all().update(is_seen=True)
 
 
 class NotificationListSerializer(serializers.ModelSerializer):

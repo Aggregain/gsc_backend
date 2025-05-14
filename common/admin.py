@@ -89,7 +89,6 @@ class SpecialtyInline(TabularInline):
                 pass
         return field
 
-# ========== ОСНОВНЫЕ МОДЕЛИ ==========
 
 
 
