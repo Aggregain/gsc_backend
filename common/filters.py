@@ -7,12 +7,12 @@ class ProgramFilter(django_filters.FilterSet):
     countries = django_filters.BaseInFilter(
         field_name='education_place__city__country__id',
         lookup_expr='in',
-        label='Страна (название)'
+        label='Страна (id)'
     )
     cities = django_filters.BaseInFilter(
         field_name='education_place__city__id',
         lookup_expr='in',
-        label='Город (название)'
+        label='Город (id)'
     )
     names = django_filters.BaseInFilter(field_name='name', lookup_expr='in', label='название программы')
     specialty_groups = django_filters.BaseInFilter(field_name='specialties__specialty_group__id', lookup_expr='in',

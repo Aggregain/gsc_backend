@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import NotAcceptable
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.response import Response
-
+from .filters import ApplicationFilter
 from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer
 from .constants import StatusChoices
 from .models import Application
@@ -34,6 +34,8 @@ class ApplicationRetrieveUpdateDestroyAPIView(BaseApplicationMixin, RetrieveUpda
 
 class ApplicationListCreateAPIView(BaseApplicationMixin, ListCreateAPIView):
 
+    filterset_class = ApplicationFilter
+    ordering_fields = '__all__'
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

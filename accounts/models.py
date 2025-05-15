@@ -26,10 +26,10 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name='статус активности')
     is_superuser = models.BooleanField(default=False, verbose_name='статус суперпользователя')
 
-    city = models.ForeignKey(City, on_delete=models.PROTECT, null=True, blank=True, verbose_name='город')
-    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.PROTECT, verbose_name='страна')
+    city = models.ForeignKey(City, on_delete=models.PROTECT, null=True, blank=True, verbose_name='город', db_index=True, related_name='accounts')
+    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.PROTECT, verbose_name='страна', db_index=True, related_name='accounts')
     education_place = models.ForeignKey(EducationPlace, null=True, blank=True, on_delete=models.PROTECT,
-                                        verbose_name='учебное заведение')
+                                        verbose_name='учебное заведение', db_index=True, related_name='accounts')
 
     ielts_grade = models.DecimalField(verbose_name='оценка IELTS', null=True, blank=True, max_digits=5, decimal_places=2)
     toefl_grade =  models.DecimalField(verbose_name='оценка TOEFL', null=True, blank=True, max_digits=5, decimal_places=2)
@@ -56,7 +56,7 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
 
 class Attachment(BaseModel):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='аккаунт',
-                                related_name='attachments')
+                                related_name='attachments', db_index=True)
     name = models.CharField(max_length=255, verbose_name='название файла/сертификата', unique=True)
     file = models.FileField(upload_to=attachment_path, null=True, blank=True, verbose_name='файл')
     meta = models.CharField(null=True, blank=True, verbose_name='дополнительно', max_length=255)

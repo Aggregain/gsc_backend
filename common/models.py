@@ -26,7 +26,7 @@ class Country(BaseModel):
 
 
 class City(BaseModel):
-    country = models.ForeignKey(Country, on_delete=models.PROTECT, verbose_name='страна', related_name='cities')
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, verbose_name='страна', related_name='cities', db_index=True)
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название города', unique=True, db_index=True)
 
     def __str__(self):
@@ -38,9 +38,9 @@ class City(BaseModel):
 
 
 class EducationPlace(BaseModel):
-    city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name='город', related_name='education_places')
+    city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name='город', related_name='education_places', db_index=True)
     name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название учебного заведения',
-                            unique=True)
+                            unique=True, db_index=True)
     logo = models.ImageField(null=True, blank=True, verbose_name='лого', upload_to=education_place_path)
     image = models.ImageField(null=True, blank=True, verbose_name='фото ВУЗа', upload_to=education_place_path)
     general_description = RichTextField(null=True, blank=True, verbose_name='основное описание')
@@ -63,7 +63,7 @@ class EducationPlace(BaseModel):
 class Program(BaseModel):
     name = models.CharField(max_length=128, choices=constants.DegreeChoices, verbose_name='название программы', db_index=True)
     education_place = models.ForeignKey(EducationPlace, verbose_name='учебное заведение', related_name='degrees',
-                                        on_delete=models.PROTECT)
+                                        on_delete=models.PROTECT, db_index=True)
     description_general = RichTextField(verbose_name='описание общее', null=True, blank=True)
     description_academic = RichTextField(verbose_name='описание академ требований', null=True, blank=True)
     description_prices = RichTextField(verbose_name='описание цен', null=True, blank=True)
@@ -87,7 +87,7 @@ class Program(BaseModel):
 
 
 class SpecialtyGroup(BaseModel):
-    name = models.CharField(max_length=255, verbose_name='название', unique=True)
+    name = models.CharField(max_length=255, verbose_name='название', unique=True, db_index=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -100,7 +100,7 @@ class SpecialtyGroup(BaseModel):
 class Specialty(BaseModel):
     name = models.CharField(max_length=255, verbose_name='название специальности', db_index=True)
     education_place = models.ForeignKey(EducationPlace, on_delete=models.PROTECT,
-                                        verbose_name='учебное заведение', related_name='specialties')
+                                        verbose_name='учебное заведение', related_name='specialties', db_index=True)
     description = RichTextField(verbose_name='описание', null=True, blank=True)
 
     specialty_group = models.ForeignKey(SpecialtyGroup, on_delete=models.PROTECT, verbose_name='группа',
