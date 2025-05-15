@@ -57,7 +57,7 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
 class Attachment(BaseModel):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='аккаунт',
                                 related_name='attachments', db_index=True)
-    name = models.CharField(max_length=255, verbose_name='название файла/сертификата', unique=True)
+    name = models.CharField(max_length=255, verbose_name='название файла/сертификата',)
     file = models.FileField(upload_to=attachment_path, null=True, blank=True, verbose_name='файл')
     meta = models.CharField(null=True, blank=True, verbose_name='дополнительно', max_length=255)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True,
