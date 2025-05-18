@@ -2,9 +2,10 @@ import json
 
 import requests
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -12,7 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from . import serializers
-from .models import Attachment
+from .models import Attachment, Account
 from .permissions import IsOwnerOrAdminPermission
 
 User = get_user_model()
@@ -87,6 +88,19 @@ class AvatarEditView(generics.UpdateAPIView):
     def get_object(self):
         return self.request.user
 
+
+class AccountDetailView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated,]
+    serializer_class = serializers.AccountDetailSerializer
+
+    def get_queryset(self):
+        return Account.objects.prefetch_related('attachments').all()
+
+    def get_object(self):
+        account =super().get_object()
+        if not self.request.user.is_staff and not self.request.user == account:
+            raise PermissionDenied
+        return account
 
 class AttachmentViewSet(ModelViewSet):
     permission_classes = [IsOwnerOrAdminPermission, ]

@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import Attachment
+from .models import Attachment, Account
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -48,6 +48,10 @@ class AccountSerializer(serializers.ModelSerializer):
         return user
 
 
+class AccountDetailSerializer(AccountSerializer):
+    attachments = AttachmentSerializer(many=True, read_only=True)
+    class Meta(AccountSerializer.Meta):
+        fields = AccountSerializer.Meta.fields + ['attachments']
 
 
 class AvatarEditSerializer(serializers.ModelSerializer):
