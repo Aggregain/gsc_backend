@@ -7,13 +7,14 @@ from notifications.serializers import NotificationSerializer, NotificationListSe
 
 
 class NotificationAPIView(APIView):
-    serializer_class = NotificationSerializer
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = NotificationSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=200)
 
 class NotificationListAPIView(ListAPIView):
     serializer_class = NotificationListSerializer
-    queryset = Notification.objects.select_related('application', 'receiver', )
+    def get_queryset(self):
+        return (Notification.objects.select_related('application', 'receiver', ).
+                filter(receiver=self.request.user).order_by('-created_at'))

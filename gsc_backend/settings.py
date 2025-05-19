@@ -287,13 +287,9 @@ UNFOLD = {
 
 
 #TODO
-# applications
-# notifications
 # phone number validation
 # media size validation in nginx
-# db indexing
 # caching
-# query optimization for views and admin
 # setting up nginx and ssl
 # google login
 # reset password

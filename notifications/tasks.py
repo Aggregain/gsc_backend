@@ -8,8 +8,6 @@ from .models import Notification
 
 @shared_task(name='create_notification')
 def create_notification_task(application_id, status, comment=None):
-    if not comment:
-        comment = 'Заявка получила новый статус'
     try:
         application = Application.objects.get(pk=application_id)
     except Application.DoesNotExist:
@@ -19,6 +17,8 @@ def create_notification_task(application_id, status, comment=None):
                                content=comment,
                                type=status,
                                application=application)
+    if not comment:
+        comment = 'Заявка получила новый статус'
 
     if receiver.email:
         send_mail(
