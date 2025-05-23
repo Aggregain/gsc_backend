@@ -58,18 +58,10 @@ class ProgramListApiView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
         base_queryset = self.get_queryset()
-        filtered_queryset, countries_qs = self.filter_queryset(base_queryset)
-        params = request.query_params
-        ordering_param = params.get('ordering')
-        if ordering_param:
-            try:
-                fields = [field.strip() for field in ordering_param.split(',')]
-                ordered_queryset = filtered_queryset.order_by(*fields)
-            except Exception:
-                ordered_queryset = filtered_queryset
-        else:
-            ordered_queryset = filtered_queryset
-        serializer = self.get_serializer(ordered_queryset, many=True)
+        filtered_queryset = self.filter_queryset(base_queryset)
+        countries_qs = getattr(filtered_queryset, "countries_qs", None)
+
+        serializer = self.get_serializer(filtered_queryset, many=True)
 
         agg_data = base_queryset.aggregate(
             max_price=Max('price'),

@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from django.db.models import Q
 from . import serializers
 from .models import Attachment, Account
 from .permissions import IsOwnerOrAdminPermission
@@ -107,7 +107,8 @@ class AttachmentViewSet(ModelViewSet):
     serializer_class = serializers.AttachmentSerializer
 
     def get_queryset(self):
-        return Attachment.objects.filter(account=self.request.user, application__isnull=True).order_by("-created_at")
+        user = self.request.user
+        return Attachment.objects.filter( Q(account=user) | Q(application__owner=user)).order_by("-created_at")
 
     def perform_create(self, serializer):
         serializer.save(account=self.request.user)
