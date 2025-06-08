@@ -31,13 +31,13 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
     education_place = models.ForeignKey(EducationPlace, null=True, blank=True, on_delete=models.PROTECT,
                                         verbose_name='учебное заведение', db_index=True, related_name='accounts')
 
-    ielts_grade = models.DecimalField(verbose_name='оценка IELTS', null=True, blank=True, max_digits=5, decimal_places=2)
-    toefl_grade =  models.DecimalField(verbose_name='оценка TOEFL', null=True, blank=True, max_digits=5, decimal_places=2)
-    sat_grade =  models.DecimalField(verbose_name='оценка SAT', null=True, blank=True, max_digits=5, decimal_places=2)
-    duolingo_grade =  models.DecimalField(verbose_name='оценка DUOLINGO', null=True, blank=True, max_digits=5, decimal_places=2)
-    gpa_grade =  models.DecimalField(verbose_name='оценка GPA', null=True, blank=True, max_digits=5, decimal_places=2)
-    gmat_grade =  models.DecimalField(verbose_name='оценка GMAT', null=True, blank=True, max_digits=5, decimal_places=2)
-    gre_grade =  models.DecimalField(verbose_name='оценка GRE', null=True, blank=True, max_digits=5, decimal_places=2)
+    ielts_grade = models.DecimalField(verbose_name='оценка IELTS', null=True, blank=True, max_digits=10, decimal_places=2)
+    toefl_grade =  models.DecimalField(verbose_name='оценка TOEFL', null=True, blank=True, max_digits=10, decimal_places=2)
+    sat_grade =  models.DecimalField(verbose_name='оценка SAT', null=True, blank=True, max_digits=10, decimal_places=2)
+    duolingo_grade =  models.DecimalField(verbose_name='оценка DUOLINGO', null=True, blank=True, max_digits=10, decimal_places=2)
+    gpa_grade =  models.DecimalField(verbose_name='оценка GPA', null=True, blank=True, max_digits=10, decimal_places=2)
+    gmat_grade =  models.DecimalField(verbose_name='оценка GMAT', null=True, blank=True, max_digits=10, decimal_places=2)
+    gre_grade =  models.DecimalField(verbose_name='оценка GRE', null=True, blank=True, max_digits=10, decimal_places=2)
 
     degree = models.CharField(verbose_name='академическая степень', choices=DegreeChoices, null=True, blank=True, max_length=128)
 
