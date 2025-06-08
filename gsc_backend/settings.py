@@ -161,6 +161,10 @@ sqlite = {
 
 FORCE_SCRIPT_NAME = "/api"
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://gsc.kz",
+    "https://*.gsc.kz",
+]
 if IN_DOCKER:
     DATABASES['default'] = postgres
 
@@ -289,10 +293,7 @@ UNFOLD = {
 
 
 #TODO
-# phone number validation
 # media size validation in nginx
-# caching
-# setting up nginx and ssl
 # google login
 # reset password
 
