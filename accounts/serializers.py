@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Attachment, Account
+from .utils import adjust_phone_number
+from .validators import validate_phone_number
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -20,6 +22,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
 class AccountSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(read_only=True)
+    phone_number = serializers.CharField(max_length=19, validators=[validate_phone_number])
     class Meta:
         model = get_user_model()
 
@@ -37,6 +40,8 @@ class AccountSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        adjusted_number = adjust_phone_number(validated_data['phone_number'])
+        validated_data['phone_number'] = adjusted_number
         return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):

@@ -159,6 +159,8 @@ sqlite = {
     'NAME': BASE_DIR / 'db.sqlite3',
 }
 
+FORCE_SCRIPT_NAME = "/api"
+
 if IN_DOCKER:
     DATABASES['default'] = postgres
 
