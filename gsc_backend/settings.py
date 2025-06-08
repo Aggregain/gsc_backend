@@ -247,7 +247,7 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-
+    'SCHEMA_PATH_PREFIX': FORCE_SCRIPT_NAME,
     'SWAGGER_UI_SETTINGS': {
         'persistAuthorization': True,
     },
