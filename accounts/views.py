@@ -103,7 +103,7 @@ class AccountDetailView(generics.RetrieveAPIView):
         return account
 
 class AttachmentViewSet(ModelViewSet):
-    permission_classes = [IsOwnerOrAdminPermission, ]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdminPermission]
     serializer_class = serializers.AttachmentSerializer
 
     def get_queryset(self):
