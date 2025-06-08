@@ -178,7 +178,7 @@ if IN_DOCKER:
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_CUSTOM_DOMAIN = f'{os.getenv('AWS_S3_CUSTOM_DOMAIN')}/{AWS_STORAGE_BUCKET_NAME}'
-    AWS_S3_URL_PROTOCOL = 'http:'
+    AWS_S3_URL_PROTOCOL = 'https:'
 
     STORAGES = {
         "default": {
@@ -293,7 +293,6 @@ UNFOLD = {
 
 
 #TODO
-# media size validation in nginx
 # google login
 # reset password
 
