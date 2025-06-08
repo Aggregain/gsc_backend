@@ -159,12 +159,12 @@ sqlite = {
     'NAME': BASE_DIR / 'db.sqlite3',
 }
 
-FORCE_SCRIPT_NAME = "/api"
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://gsc.kz",
-    "https://*.gsc.kz",
-]
+# FORCE_SCRIPT_NAME = "/api"
+#
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://gsc.kz",
+#     "https://*.gsc.kz",
+# ]
 if IN_DOCKER:
     DATABASES['default'] = postgres
 
@@ -247,7 +247,9 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'SCHEMA_PATH_PREFIX': '/api',
+    "SERVERS": [
+        {"url": "/api"}
+    ],
     'SWAGGER_UI_SETTINGS': {
         'persistAuthorization': True,
     },
