@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotAcceptable
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.response import Response
-
-from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer
+from applications.serializers import ApplicationCreateSerializer, ApplicationListSerializer, ApplicationRetrieveUpdateSerializer
 from .constants import StatusChoices
 from .filters import ApplicationFilter
 from .models import Application
@@ -27,7 +27,7 @@ class BaseApplicationMixin(GenericAPIView):
 
 class ApplicationRetrieveUpdateDestroyAPIView(BaseApplicationMixin, RetrieveUpdateDestroyAPIView):
     serializer_class = ApplicationListSerializer
-    permission_classes = [ApplicationEditPermission,]
+    permission_classes = [IsAuthenticated, ApplicationEditPermission,]
 
 
 
