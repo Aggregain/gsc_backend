@@ -44,7 +44,7 @@ class GoogleView(APIView):
                 'code': code,
                 'client_id': settings.GOOGLE_CLIENT_ID,
                 'client_secret': settings.GOOGLE_SECRET_KEY,
-                'redirect_uri': 'https://gsc.kz',
+                'redirect_uri': settings.GOOGLE_OAUTH_CALLBACK_URL,
                 'grant_type': 'authorization_code',
             }
             response = requests.post('https://oauth2.googleapis.com/token', data=data)
