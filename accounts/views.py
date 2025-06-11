@@ -1,5 +1,3 @@
-import json
-
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -106,7 +104,6 @@ class AvatarEditView(generics.UpdateAPIView):
 
 
 class AccountDetailView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated,]
     serializer_class = serializers.AccountDetailSerializer
 
     def get_queryset(self):
@@ -114,7 +111,7 @@ class AccountDetailView(generics.RetrieveAPIView):
 
     def get_object(self):
         account =super().get_object()
-        if not self.request.user.is_staff and not self.request.user == account:
+        if not self.request.user.is_staff or not self.request.user == account:
             raise PermissionDenied
         return account
 
