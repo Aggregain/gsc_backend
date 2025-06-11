@@ -37,8 +37,10 @@ class GoogleView(APIView):
     def post(self, request):
         serializer = serializers.GoogleTokenSerializer(data=request.data)
         if serializer.is_valid():
-            payload = {'access_token': serializer.data}
-            r = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
+            token = serializer.data["token"]
+            headers = {"Authorization": f"Bearer {token}"}
+            print(headers)
+            r = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', headers=headers)
             data = json.loads(r.text)
 
             if 'error' in data:

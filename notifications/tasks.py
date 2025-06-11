@@ -1,10 +1,19 @@
+from datetime import timedelta
+
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
+from django.utils import timezone
 
 from applications.models import Application
 from .models import Notification
 
+
+@shared_task(name='notifications.tasks.clear_seen_notifications')
+def clear_seen_notifications():
+    week_ago = timezone.now() - timedelta(weeks=1)
+    Notification.objects.filter(is_seen=True, created_at__lte=week_ago).delete()
+    return True
 
 @shared_task(name='create_notification')
 def create_notification_task(application_id, status, comment=None):
@@ -14,9 +23,9 @@ def create_notification_task(application_id, status, comment=None):
         return
     receiver = application.owner
     Notification.objects.create(receiver=receiver,
-                               content=comment,
-                               type=status,
-                               application=application)
+                                content=comment,
+                                type=status,
+                                application=application)
     if not comment:
         comment = 'Заявка получила новый статус'
 

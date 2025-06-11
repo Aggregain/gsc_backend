@@ -298,11 +298,10 @@ UNFOLD = {
 # google login
 # reset password
 # email confirm when register
-# send email to assignee of application
+# send email to assignee of application on change
 # send status updates to application owner on updates
 # setup smtp for gsc
-# fix bug with editing application
-# fix minio console(optional)
+
 
 
 
