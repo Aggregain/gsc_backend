@@ -20,6 +20,7 @@ User = get_user_model()
 
 
 class GoogleView(APIView):
+    permission_classes = (AllowAny,)
     @extend_schema(
         request=serializers.GoogleTokenSerializer,
         responses={
@@ -44,7 +45,6 @@ class GoogleView(APIView):
                 content = {'message': 'wrong google token / this google token is already expired.'}
                 return Response(content)
 
-            # create user if not exist
             try:
                 user = User.objects.get(email=data['email'])
             except User.DoesNotExist:
