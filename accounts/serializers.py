@@ -66,4 +66,4 @@ class AvatarEditSerializer(serializers.ModelSerializer):
 
 
 class GoogleTokenSerializer(serializers.Serializer):
-    token = serializers.CharField()
+    code = serializers.CharField()

@@ -53,6 +53,11 @@ class ApplicationListSerializer(ApplicationBaseSerializer):
         return EducationPlaceSerializer(
             obj.program.education_place).data
 
+    def update(self, instance, validated_data):
+        if not self.validated_data.get('comment_file'):
+            instance.comment_file = None
+            instance.save()
+        return super().update(instance, validated_data)
 
 class ApplicationRetrieveUpdateSerializer(ApplicationBaseSerializer):
     class Meta(ApplicationBaseSerializer.Meta):

@@ -1,6 +1,7 @@
 import json
 
 import requests
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
@@ -38,11 +39,23 @@ class GoogleView(APIView):
     def post(self, request):
         serializer = serializers.GoogleTokenSerializer(data=request.data)
         if serializer.is_valid():
-            token = serializer.data["token"]
+            code = serializer.data["code"]
+            data = {
+                'code': code,
+                'client_id': settings.GOOGLE_CLIENT_ID,
+                'client_secret': settings.GOOGLE_SECRET_KEY,
+                'redirect_uri': 'https://gsc.kz',
+                'grant_type': 'authorization_code',
+            }
+            response = requests.post('https://oauth2.googleapis.com/token', data=data)
+            print(response.status_code)
+            print(response.text)
+            print(response.json())
+            token = response.json().get("access_token")
             headers = {"Authorization": f"Bearer {token}"}
             print(headers)
             r = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', headers=headers)
-            data = json.loads(r.text)
+            data = r.json()
 
             if 'error' in data:
                 content = {'message': 'wrong google token / this google token is already expired.'}
@@ -52,8 +65,8 @@ class GoogleView(APIView):
                 user = User.objects.get(email=data['email'])
             except User.DoesNotExist:
                 user = User.objects.create_user(email=data['email'],
-                                                first_name=data['first_name'],
-                                                second_name=data['second_name'])
+                                                first_name=data['given_name'],
+                                                second_name=data['family_name'],)
 
             token = RefreshToken.for_user(user)
             response = dict()
