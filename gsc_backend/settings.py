@@ -298,8 +298,6 @@ UNFOLD = {
 # google login
 # reset password
 # email confirm when register
-# send email to assignee of application on change
-# send status updates to application owner on updates
 # setup smtp for gsc
 
 

@@ -8,3 +8,4 @@ class StatusChoices(models.TextChoices):
     ACCEPTED = 'ACCEPTED', 'принято'
     FOR_REVISION = 'FOR_REVISION',  'на доработку'
     FOR_CONSIDERATION = 'FOR_CONSIDERATION', 'на рассмотрении'
+    FOR_ADMINS = 'FOR_ADMINS', 'для админов'

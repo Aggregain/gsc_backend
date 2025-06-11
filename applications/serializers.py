@@ -19,11 +19,14 @@ class ApplicationCreateSerializer(serializers.Serializer):
     def save(self, **kwargs):
         user = self.context['request'].user
         education_place = get_object_or_404(EducationPlace, pk=self.validated_data['education_place'])
-        program = education_place.degrees.filter(name=user.degree).first()
+
         if not user.degree:
             raise NotAcceptable('Программа в профиле пользователя не выбрана')
+        program = education_place.degrees.filter(name=user.degree).first()
+
         if not program:
             raise NotAcceptable(f'В выбранном университете отсутствует программа "{user.degree}"')
+
         qs = Application.objects.filter(program=program, owner=user,
                                         ).exclude(status=StatusChoices.DENIED)
 
