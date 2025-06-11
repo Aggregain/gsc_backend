@@ -7,7 +7,7 @@ from applications.constants import StatusChoices
 
 @receiver(pre_save, sender=Application)
 def create_notification_signal(sender, instance, **kwargs):
-    if not instance.pk:
+    if not instance.pk or instance.status == StatusChoices.DRAFT:
         return
 
     try:
