@@ -29,6 +29,7 @@ class GoogleView(APIView):
                 "properties": {
                     "refresh": {"type": "string", "description": "Refresh token"},
                     "access": {"type": "string", "description": "Access token"},
+                    "is_staff": {"type": "boolean", "description": "Is staff"},
                 },
             },
             400: {"type": "object", "description": "Validation errors or invalid token"},
@@ -37,7 +38,8 @@ class GoogleView(APIView):
     def post(self, request):
         serializer = serializers.GoogleTokenSerializer(data=request.data)
         if serializer.is_valid():
-            code = serializer.data["code"]
+            code = serializer.validated_data["code"]
+            print(settings.GOOGLE_OAUTH_CALLBACK_URL)
             data = {
                 'code': code,
                 'client_id': settings.GOOGLE_CLIENT_ID,
@@ -56,7 +58,7 @@ class GoogleView(APIView):
             data = r.json()
 
             if 'error' in data:
-                content = {'message': 'wrong google token / this google token is already expired.'}
+                content = {'message': data}
                 return Response(content)
 
             try:
@@ -68,11 +70,11 @@ class GoogleView(APIView):
 
             token = RefreshToken.for_user(user)
             response = dict()
-            response['first_name'] = user.first_name
-            response['second_name'] = user.second_name
-            response['access_token'] = str(token.access_token)
-            response['refresh_token'] = str(token)
-            return Response(response)
+
+            response['access'] = str(token.access_token)
+            response['refresh'] = str(token)
+            response['is_staff'] = user.is_staff
+            return Response(data=response, status=200)
         return Response(serializer.errors, status=400)
 
 
