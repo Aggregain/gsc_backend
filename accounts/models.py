@@ -61,7 +61,7 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
     def email_confirmation_url(self):
         token = default_token_generator.make_token(self)
         uid = urlsafe_base64_encode(force_bytes(self.pk))
-        confirmation_url = f"{settings.BACKEND_BASE_URL}/accounts/email/confirm/{uid}/{token}"
+        confirmation_url = f"{settings.BACKEND_BASE_URL}/api/accounts/email/confirm/{uid}/{token}"
         return confirmation_url
 
     @property
