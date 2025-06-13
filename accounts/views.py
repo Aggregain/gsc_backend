@@ -64,7 +64,8 @@ class GoogleView(APIView):
         except User.DoesNotExist:
             user = User.objects.create_user(email=data['email'],
                                             first_name=data['given_name'],
-                                            second_name=data['family_name'],)
+                                            second_name=data['family_name'],
+                                            is_active=True,)
 
         token = RefreshToken.for_user(user)
         response = dict()
