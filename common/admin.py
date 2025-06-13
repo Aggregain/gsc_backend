@@ -9,10 +9,10 @@ from .models import (
     SpecialtyGroup, Specialty, Expense, AcademicRequirement
 )
 
-# Отключаем стандартную регистрацию Site
+
 admin.site.unregister(Site)
 
-# ========== INLINE-КЛАССЫ ==========
+
 
 class ProgramInline(TabularInline):
     fields = ('name', 'duration_years', 'language', 'format', 'edit_link')
@@ -99,6 +99,9 @@ class CountryAdmin(ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(ModelAdmin):
+    list_per_page = 20
+    search_fields = ('name',)
+    list_display = ('name',)
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('country')
@@ -106,6 +109,9 @@ class CityAdmin(ModelAdmin):
 
 @admin.register(EducationPlace)
 class EducationPlaceAdmin(ModelAdmin):
+    list_per_page = 20
+    list_display = ('name',)
+    search_fields = ('name',)
     inlines = [SpecialtyInline]
     exclude = ('prices_data',)
 

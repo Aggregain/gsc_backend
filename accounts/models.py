@@ -1,5 +1,10 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.tokens import default_token_generator
 from django.db import models
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
 from applications.models import Application
 from accounts.managers import AccountManager
 from common.models import BaseModel, EducationPlace, City, Country
@@ -23,7 +28,7 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True, verbose_name='аватар')
 
     is_staff = models.BooleanField(default=False, verbose_name='статус админа')
-    is_active = models.BooleanField(default=True, verbose_name='статус активности')
+    is_active = models.BooleanField(default=False, verbose_name='статус активности')
     is_superuser = models.BooleanField(default=False, verbose_name='статус суперпользователя')
 
     city = models.ForeignKey(City, on_delete=models.PROTECT, null=True, blank=True, verbose_name='город', db_index=True, related_name='accounts')
@@ -51,6 +56,20 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'аккаунт'
         verbose_name_plural = 'аккаунты'
+
+    @property
+    def email_confirmation_url(self):
+        token = default_token_generator.make_token(self)
+        uid = urlsafe_base64_encode(force_bytes(self.pk))
+        confirmation_url = f"{settings.BACKEND_BASE_URL}/accounts/email/confirm/{uid}/{token}"
+        return confirmation_url
+
+    @property
+    def password_reset_url(self):
+        token = default_token_generator.make_token(self)
+        uid = urlsafe_base64_encode(force_bytes(self.pk))
+        reset_url = f"{settings.FRONTEND_BASE_URL}/reset-password/{uid}/{token}"
+        return reset_url
 
 
 

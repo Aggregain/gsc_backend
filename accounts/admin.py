@@ -1,4 +1,4 @@
-from allauth.socialaccount.models import SocialApp, SocialAccount, SocialToken, EmailAddress
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
@@ -27,10 +27,6 @@ admin.site.unregister(GroupResult)
 
 admin.site.unregister(Group)
 
-admin.site.unregister(SocialToken)
-admin.site.unregister(SocialApp)
-admin.site.unregister(EmailAddress)
-admin.site.unregister(SocialAccount)
 
 
 
@@ -64,7 +60,7 @@ class AccountAdmin(BaseUserAdmin, ModelAdmin):
                 "classes": ("wide",),
                 "fields": (
                     "first_name", "second_name", "last_name", "birth_date", "avatar", "email", "password1",
-                    "password2",
+                    "password2",  "is_active", "is_staff", "is_superuser",
                 ),
             },
         ),

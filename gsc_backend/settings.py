@@ -38,11 +38,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'django_celery_results',
     'django_celery_beat',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'dj_rest_auth.registration',
     'ckeditor',
     'debug_toolbar',
 
@@ -57,22 +52,12 @@ INTERNAL_IPS = [
     # ...
     '127.0.0.1',
 ]
-# REST_AUTH = {
-#     'TOKEN_MODEL': None,
-#     'USE_JWT': True,
-# }
 
-SITE_ID = 1
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-# ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-# ACCOUNT_LOGIN_METHODS = {'email'}
-# SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
-# SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
-# PASSWORD_RESET_USE_SITES_DOMAIN = True
 
 BACKEND_BASE_URL = os.getenv('BACKEND_BASE_URL')
 GOOGLE_OAUTH_CALLBACK_PATH = os.getenv('GOOGLE_OAUTH_CALLBACK_PATH')
 GOOGLE_OAUTH_CALLBACK_URL = BACKEND_BASE_URL + GOOGLE_OAUTH_CALLBACK_PATH
+FRONTEND_BASE_URL = os.getenv('FRONTEND_BASE_URL')
 
 GOOGLE_SECRET_KEY = os.getenv('GOOGLE_SECRET_KEY')
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
@@ -85,22 +70,6 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'APP': {
-#             'client_id': GOOGLE_CLIENT_ID,
-#             'secret': GOOGLE_SECRET_KEY,
-#             'key': ''
-#         },
-#         'SCOPE': [
-#             'profile',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
-#         }
-#     }
-# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -111,7 +80,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 
 ]
 
@@ -293,11 +261,6 @@ UNFOLD = {
     "THEME": "dark",
 }
 
-
-#TODO
-# reset password
-# email confirm when register
-# setup smtp for gsc
 
 
 
