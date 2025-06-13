@@ -159,12 +159,12 @@ sqlite = {
     'NAME': BASE_DIR / 'db.sqlite3',
 }
 
-# FORCE_SCRIPT_NAME = "/api"
-#
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://gsc.kz",
-#     "https://*.gsc.kz",
-# ]
+FORCE_SCRIPT_NAME = "/api"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://gsc.kz",
+    "https://*.gsc.kz",
+]
 if IN_DOCKER:
     DATABASES['default'] = postgres
 
@@ -178,7 +178,7 @@ if IN_DOCKER:
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_CUSTOM_DOMAIN = f'{os.getenv('AWS_S3_CUSTOM_DOMAIN')}/{AWS_STORAGE_BUCKET_NAME}'
-    AWS_S3_URL_PROTOCOL = 'http:'
+    AWS_S3_URL_PROTOCOL = 'https:'
 
     STORAGES = {
         "default": {
@@ -295,7 +295,6 @@ UNFOLD = {
 
 
 #TODO
-# google login
 # reset password
 # email confirm when register
 # setup smtp for gsc
