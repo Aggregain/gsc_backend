@@ -57,7 +57,8 @@ class AccountSerializer(serializers.ModelSerializer):
             user = get_user_model().objects.get(email=validated_data['email'])
         except get_user_model().DoesNotExist:
             user = get_user_model().objects.create_user(**validated_data)
-        tasks.send_confirmation_email.delay(user.email_confirmation_url, user.email)
+        if not user.is_active:
+            tasks.send_confirmation_email.delay(user.email_confirmation_url, user.email)
         return user
 
     def update(self, instance, validated_data):
