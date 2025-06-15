@@ -49,7 +49,10 @@ class AccountSerializer(serializers.ModelSerializer):
         if validated_data.get('phone_number'):
             adjusted_number = adjust_phone_number(validated_data['phone_number'])
             validated_data['phone_number'] = adjusted_number
-        user = get_user_model().objects.create_user(**validated_data)
+        try:
+            user = get_user_model().objects.get(email=validated_data['email'])
+        except get_user_model().DoesNotExist:
+            user = get_user_model().objects.create_user(**validated_data)
         tasks.send_confirmation_email.delay(user.email_confirmation_url, user.email)
         return user
 

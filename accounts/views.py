@@ -8,14 +8,16 @@ from django.http.response import HttpResponseRedirect
 from django.utils.http import urlsafe_base64_decode
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from . import serializers, tasks
+from . import serializers
 from .models import Attachment, Account
 
 User = get_user_model()
@@ -23,6 +25,7 @@ User = get_user_model()
 
 class GoogleView(APIView):
     permission_classes = (AllowAny,)
+
     @extend_schema(
         request=serializers.GoogleTokenSerializer,
         responses={
@@ -55,7 +58,7 @@ class GoogleView(APIView):
         data = r.json()
 
         if 'error' in data:
-            content = {'message': data}
+            content = {'detail': 'Invalid token'}
             return Response(content)
 
         try:
@@ -64,7 +67,7 @@ class GoogleView(APIView):
             user = User.objects.create_user(email=data['email'],
                                             first_name=data['given_name'],
                                             second_name=data['family_name'],
-                                            is_active=True,)
+                                            is_active=True, )
 
         token = RefreshToken.for_user(user)
         response = dict()
@@ -78,6 +81,17 @@ class GoogleView(APIView):
 class TokenView(TokenObtainPairView):
     serializer_class = serializers.CustomTokenObtainPairSerializer
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except (InvalidToken, TokenError) as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except AuthenticationFailed as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class CreateAccountView(generics.CreateAPIView):
@@ -106,18 +120,19 @@ class AccountDetailView(generics.RetrieveAPIView):
         return Account.objects.prefetch_related('attachments').all()
 
     def get_object(self):
-        account =super().get_object()
+        account = super().get_object()
         if not self.request.user.is_staff or not self.request.user == account:
             raise PermissionDenied
         return account
 
+
 class AttachmentViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
     serializer_class = serializers.AttachmentSerializer
 
     def get_queryset(self):
         user = self.request.user
-        return Attachment.objects.filter( Q(account=user) | Q(application__owner=user)).order_by("-created_at")
+        return Attachment.objects.filter(Q(account=user) | Q(application__owner=user)).order_by("-created_at")
 
     def perform_create(self, serializer):
         serializer.save(account=self.request.user)
@@ -142,9 +157,9 @@ class ConfirmEmailSendView(APIView):
         serializer = serializers.EmailConfirmSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(data={'detail': f"Ссылка на подтверждение аккаунта отправлена на почту {serializer.validated_data['email']}"},
+        return Response(data={
+            'detail': f"Ссылка на подтверждение аккаунта отправлена на почту {serializer.validated_data['email']}"},
                         status=status.HTTP_200_OK)
-
 
 
 class EmailConfirmView(APIView):
@@ -169,13 +184,14 @@ class PasswordResetView(APIView):
 
     @extend_schema(
         request=serializers.PasswordResetSerializer,
-        description="reset password",)
+        description="reset password", )
     def post(self, request):
         serializer = serializers.PasswordResetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"detail": "Письмо со ссылкой для сброса пароля отправлено на ваш email"})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PasswordResetConfirmView(APIView):
     permission_classes = [AllowAny]
@@ -187,5 +203,5 @@ class PasswordResetConfirmView(APIView):
         serializer = serializers.PasswordResetConfirmSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(data={'detail': 'Пароль успешно изменен'},status=200)
+            return Response(data={'detail': 'Пароль успешно изменен'}, status=200)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
