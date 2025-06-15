@@ -42,8 +42,12 @@ class AccountSerializer(serializers.ModelSerializer):
                 'write_only': True,
 
                 'style': {'input_type': 'password'}
+            },
+            'email': {
+                'validators': []
             }
         }
+
 
     def create(self, validated_data):
         if validated_data.get('phone_number'):
