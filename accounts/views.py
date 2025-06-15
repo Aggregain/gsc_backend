@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from . import serializers, tasks
 from .models import Attachment, Account
@@ -79,9 +79,6 @@ class TokenView(TokenObtainPairView):
     serializer_class = serializers.CustomTokenObtainPairSerializer
 
 
-class RefreshView(TokenRefreshView):
-    pass
-
 
 class CreateAccountView(generics.CreateAPIView):
     permission_classes = [AllowAny]
@@ -129,7 +126,18 @@ class AttachmentViewSet(ModelViewSet):
 class ConfirmEmailSendView(APIView):
     permission_classes = [AllowAny]
 
-
+    @extend_schema(
+        request=serializers.EmailConfirmSerializer,
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "description": "success message"},
+                },
+            },
+            400: {"type": "object", "description": "Validation errors"},
+        },
+        description="Verify google token and activate the account.")
     def post(self, request, *args, **kwargs):
         serializer = serializers.EmailConfirmSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
