@@ -15,7 +15,7 @@ urlpatterns = [
                   path('google/', GoogleView.as_view(), name="google_login"),
                   path('avatar/', views.AvatarEditView.as_view(), name="avatar"),
                   path('<int:pk>/', views.AccountDetailView.as_view(), name="account-detail"),
-                  path('email/confirm/send/', views.EmailConfirmView.as_view(), name="email-confirm-send"),
+                  path('email/confirm/send/', views.ConfirmEmailSendView.as_view(), name="email-confirm-send"),
                   path('email/confirm/<str:uidb64>/<str:token>/', views.EmailConfirmView.as_view(),
                        name='email-confirm'),
                   path('password/reset/', views.PasswordResetView.as_view(), name='password-reset'),

@@ -126,7 +126,7 @@ class AttachmentViewSet(ModelViewSet):
         serializer.save(account=self.request.user)
 
 
-class ConfirmEmailView(APIView):
+class ConfirmEmailSendView(APIView):
     permission_classes = [AllowAny]
 
 
