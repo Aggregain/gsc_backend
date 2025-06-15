@@ -93,6 +93,11 @@ class PasswordResetSerializer(serializers.Serializer):
                                               self.user.email, )
 
 
+class EmailConfirmSerializer(PasswordResetSerializer):
+    def save(self):
+        tasks.send_confirmation_email.delay(self.user.email_confirmation_url,
+                                            self.user.email)
+
 class PasswordResetConfirmSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
     token = serializers.CharField()

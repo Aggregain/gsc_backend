@@ -1,11 +1,11 @@
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http.response import HttpResponseRedirect
 from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -15,9 +15,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from . import serializers
+from . import serializers, tasks
 from .models import Attachment, Account
-from .permissions import IsOwnerOrAdminPermission
 
 User = get_user_model()
 
@@ -116,7 +115,7 @@ class AccountDetailView(generics.RetrieveAPIView):
         return account
 
 class AttachmentViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwnerOrAdminPermission]
+    permission_classes = [IsAuthenticated,]
     serializer_class = serializers.AttachmentSerializer
 
     def get_queryset(self):
@@ -125,6 +124,19 @@ class AttachmentViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(account=self.request.user)
+
+
+class ConfirmEmailView(APIView):
+    permission_classes = [AllowAny]
+
+
+    def post(self, request, *args, **kwargs):
+        serializer = serializers.EmailConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data={'detail': f"Ссылка на подтверждение аккаунта отправлена на почту {serializer.validated_data['email']}"},
+                        status=status.HTTP_200_OK)
+
 
 
 class EmailConfirmView(APIView):
