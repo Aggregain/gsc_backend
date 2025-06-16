@@ -100,18 +100,7 @@ class CreateAccountView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = serializers.AccountSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        else:
 
-            fields_err = defaultdict(str)
-            for field, detail in serializer.errors.items():
-                fields_err[field] = detail[0]
-            return Response(data={'detail': fields_err}, status=status.HTTP_400_BAD_REQUEST)
 class ManageAccountView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.AccountSerializer
 

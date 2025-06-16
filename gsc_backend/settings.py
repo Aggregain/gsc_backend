@@ -240,6 +240,7 @@ REST_FRAMEWORK = {
     'DATE_FORMAT': "%d/%m/%Y",
     'DATE_INPUT_FORMATS': ["%d/%m/%Y"],
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'EXCEPTION_HANDLER': ' common.exceptions.custom_exception_handler'
 
 
 }
