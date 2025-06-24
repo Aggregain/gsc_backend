@@ -53,7 +53,9 @@ LOGGING = {
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'import_export',
     'unfold',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -39,7 +39,7 @@ class City(BaseModel):
 
 class EducationPlace(BaseModel):
     city = models.ForeignKey(City, on_delete=models.PROTECT, verbose_name='город', related_name='education_places', db_index=True)
-    name = models.CharField(max_length=255, null=True, blank=True, verbose_name='название учебного заведения',
+    name = models.CharField(max_length=255,  verbose_name='название учебного заведения',
                             unique=True, db_index=True)
     logo = models.ImageField(null=True, blank=True, verbose_name='лого', upload_to=education_place_path)
     image = models.ImageField(null=True, blank=True, verbose_name='фото ВУЗа', upload_to=education_place_path)

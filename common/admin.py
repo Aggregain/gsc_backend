@@ -3,12 +3,15 @@ from django.contrib.sites.models import Site
 from django.urls.base import reverse
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin, TabularInline
+from import_export.admin import ImportExportModelAdmin
+from unfold.contrib.import_export.forms import ImportForm, SelectableFieldsExportForm
+
 
 from .models import (
     City, Country, EducationPlace, Deadline, Program,
     SpecialtyGroup, Specialty, Expense, AcademicRequirement
 )
-
+from .resources import EducationPlaceResource
 
 admin.site.unregister(Site)
 
@@ -101,23 +104,28 @@ class CountryAdmin(ModelAdmin):
 class CityAdmin(ModelAdmin):
     list_per_page = 20
     search_fields = ('name',)
-    list_display = ('name',)
+    list_display = ('name', 'id')
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('country')
 
 
 @admin.register(EducationPlace)
-class EducationPlaceAdmin(ModelAdmin):
+class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
     list_per_page = 20
-    list_display = ('name',)
+    list_display = ('name', 'city', 'rating', 'foundation_date', 'is_for_admission')
     search_fields = ('name',)
     inlines = [SpecialtyInline]
     exclude = ('prices_data',)
 
+    resource_class = EducationPlaceResource
+
+    import_form_class = ImportForm
+    export_form_class = SelectableFieldsExportForm
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('city__country')
+        return qs.select_related('city','city__country')
 
 
 @admin.register(Program)
