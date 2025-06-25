@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.db import models
+from django.forms import DateInput
 from django.urls.base import reverse
 from django.utils.html import format_html
-from unfold.admin import ModelAdmin, TabularInline
 from import_export.admin import ImportExportModelAdmin
+from unfold.admin import ModelAdmin, TabularInline
 from unfold.contrib.import_export.forms import ImportForm, SelectableFieldsExportForm
-
 
 from .models import (
     City, Country, EducationPlace, Deadline, Program,
@@ -14,7 +15,6 @@ from .models import (
 from .resources import EducationPlaceResource
 
 admin.site.unregister(Site)
-
 
 
 class ProgramInline(TabularInline):
@@ -28,6 +28,7 @@ class ProgramInline(TabularInline):
             url = reverse('admin:common_program_change', args=[obj.pk])
             return format_html('<a class="button" href="{}" target="_blank">Редактировать</a>', url)
         return ''
+
     edit_link.short_description = 'Редактировать'
 
     def get_queryset(self, request):
@@ -74,6 +75,7 @@ class SpecialtyInline(TabularInline):
             url = reverse('admin:common_specialty_change', args=[obj.pk])
             return format_html('<a class="button" href="{}" target="_blank">Редактировать</a>', url)
         return ''
+
     edit_link.short_description = 'Редактировать'
 
     def get_queryset(self, request):
@@ -93,8 +95,6 @@ class SpecialtyInline(TabularInline):
         return field
 
 
-
-
 @admin.register(Country)
 class CountryAdmin(ModelAdmin):
     ...
@@ -105,6 +105,7 @@ class CityAdmin(ModelAdmin):
     list_per_page = 20
     search_fields = ('name',)
     list_display = ('name', 'id')
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('country')
@@ -113,7 +114,7 @@ class CityAdmin(ModelAdmin):
 @admin.register(EducationPlace)
 class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
     list_per_page = 20
-    list_display = ('name', 'city', 'rating', 'foundation_date', 'is_for_admission')
+    list_display = ('name', 'get_country', 'city', 'rating', 'is_for_admission')
     search_fields = ('name',)
     inlines = [SpecialtyInline]
     exclude = ('prices_data',)
@@ -125,7 +126,13 @@ class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('city','city__country')
+        return qs.select_related('city', 'city__country')
+
+    @admin.display(description='Страна')
+    def get_country(self, obj):
+        return obj.city.country.name
+
+
 
 
 @admin.register(Program)
@@ -141,6 +148,7 @@ class ProgramAdmin(ModelAdmin):
 @admin.register(SpecialtyGroup)
 class SpecialtyGroupAdmin(ModelAdmin):
     ...
+
 
 @admin.register(Specialty)
 class SpecialtyAdmin(ModelAdmin):
