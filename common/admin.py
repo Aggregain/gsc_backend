@@ -114,7 +114,7 @@ class CityAdmin(ModelAdmin):
 @admin.register(EducationPlace)
 class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
     list_per_page = 20
-    list_display = ('name', 'get_country', 'city', 'rating', 'is_for_admission')
+    list_display = ('name', 'get_country', 'city', 'rating',)
     search_fields = ('name',)
     inlines = [SpecialtyInline]
     exclude = ('prices_data',)
