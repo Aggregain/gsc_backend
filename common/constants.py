@@ -11,7 +11,7 @@ class DegreeChoices(models.TextChoices):
 class FormatChoices(models.TextChoices):
     online = 'ONLINE', 'online'
     offline = 'OFFLINE', 'offline'
-    both = 'BOTH', 'Оба'
+    hybrid = 'HYBRID', 'hybrid'
 
 class LanguageChoices(models.TextChoices):
     english = 'ENGLISH', 'english'
