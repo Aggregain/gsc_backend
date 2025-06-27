@@ -48,7 +48,7 @@ class EducationPlace(BaseModel):
     scholarship_description = RichTextField(verbose_name='описание стипендии', null=True, blank=True)
     link = models.URLField(null=True, blank=True, verbose_name='ссылка на страницу ВУЗа')
     rating = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='рейтинг', db_index=True)
-    foundation_date = models.DateField(null=True, blank=True, verbose_name='Дата основания', db_index=True)
+    foundation_year = models.PositiveIntegerField(null=True, blank=True, verbose_name='Год основания', db_index=True)
     prices_data = models.JSONField(null=True, blank=True, verbose_name='цены')
     is_for_admission = models.BooleanField(default=True, verbose_name='доступно для поступления', db_index=True)
 

@@ -13,10 +13,10 @@ class EducationPlaceResource(resources.ModelResource):
     name = fields.Field(attribute='name', column_name='Название ВУЗа')
     link = fields.Field(attribute='link', column_name='Ссылка на сайт')
     rating = fields.Field(attribute='rating', column_name='Рейтинг')
-    foundation_date = fields.Field(attribute='foundation_date', column_name='Дата основания')
+    foundation_year = fields.Field(attribute='foundation_year', column_name='Год основания')
     is_for_admission = fields.Field(attribute='is_for_admission', column_name='Доступен для поступления')
 
     class Meta:
         model = EducationPlace
-        fields = ('city', 'name', 'link', 'rating', 'foundation_date', 'is_for_admission')
+        fields = ('city', 'name', 'link', 'rating', 'foundation_year', 'is_for_admission')
         import_id_fields = ('name',)

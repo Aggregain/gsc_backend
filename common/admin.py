@@ -138,7 +138,7 @@ class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
 @admin.register(Program)
 class ProgramAdmin(ModelAdmin):
     inlines = [AcademicRequirementInline, ExpenseInline, SpecialtyInline, DeadlineInline]
-    exclude = ('specialty_durations',)
+    exclude = ('specialty_durations', 'description_academic', 'description_prices')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
