@@ -79,7 +79,7 @@ class SpecialtyInline(TabularInline):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('education_place', 'specialty_group', 'program')
+        return qs.select_related('specialty_group', 'program')
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         field = super().formfield_for_foreignkey(db_field, request, **kwargs)
