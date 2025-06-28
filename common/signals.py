@@ -16,7 +16,7 @@ def change_prices_data(sender, instance, **kwargs):
 @receiver(post_save, sender=models.Specialty)
 def change_durations(sender, instance, **kwargs):
     program = instance.program
-    specialties = program.specialities.all()
+    specialties = program.specialties.all()
     max_duration = specialties.aggregate(Max('duration'))['duration__max']
     min_duration = specialties.aggregate(Min('duration'))['duration__min']
     if program.specialty_durations:
