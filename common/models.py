@@ -99,8 +99,7 @@ class SpecialtyGroup(BaseModel):
 
 class Specialty(BaseModel):
     name = models.CharField(max_length=255, verbose_name='название специальности', db_index=True)
-    education_place = models.ForeignKey(EducationPlace, on_delete=models.PROTECT,
-                                        verbose_name='учебное заведение', related_name='specialties', db_index=True)
+
     description = RichTextField(verbose_name='описание', null=True, blank=True)
 
     specialty_group = models.ForeignKey(SpecialtyGroup, on_delete=models.PROTECT, verbose_name='группа',
@@ -113,12 +112,12 @@ class Specialty(BaseModel):
     duration = models.PositiveIntegerField(verbose_name='длительность(лет)', db_index=True)
 
     def __str__(self):
-        return f'{self.name} {self.education_place}'
+        return f'{self.name}'
 
     class Meta:
         verbose_name = 'специальность'
         verbose_name_plural = 'специальности'
-        unique_together = ('education_place', 'program', 'name')
+        unique_together = ('program', 'name')
 
 
 class Deadline(BaseModel):

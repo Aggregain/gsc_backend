@@ -64,8 +64,7 @@ class AcademicRequirementInline(TabularInline):
 
 
 class SpecialtyInline(TabularInline):
-    fields = ('name', 'program', 'specialty_group', 'duration', 'price', 'admission_deadline',
-              'education_place', 'edit_link')
+    fields = ('name', 'program', 'specialty_group', 'duration', 'price', 'admission_deadline', 'edit_link')
     model = Specialty
     extra = 0
     readonly_fields = ('edit_link',)
@@ -116,7 +115,6 @@ class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
     list_per_page = 20
     list_display = ('name', 'get_country', 'city', 'rating',)
     search_fields = ('name',)
-    inlines = [SpecialtyInline]
     exclude = ('prices_data',)
 
     resource_class = EducationPlaceResource
@@ -137,7 +135,7 @@ class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
 
 @admin.register(Program)
 class ProgramAdmin(ModelAdmin):
-    inlines = [AcademicRequirementInline, ExpenseInline, SpecialtyInline, DeadlineInline]
+    inlines = [AcademicRequirementInline, ExpenseInline, SpecialtyInline,]
     exclude = ('specialty_durations', 'description_academic', 'description_prices')
 
     def get_queryset(self, request):
