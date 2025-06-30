@@ -152,4 +152,4 @@ class SpecialtyGroupAdmin(ModelAdmin):
 class SpecialtyAdmin(ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('education_place', 'specialty_group', 'program__education_place')
+        return qs.select_related('specialty_group', 'program__education_place')

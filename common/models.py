@@ -59,6 +59,9 @@ class EducationPlace(BaseModel):
         verbose_name = 'учебное заведение'
         verbose_name_plural = 'учебные заведения'
 
+    @property
+    def specialties(self):
+        return Specialty.objects.filter(program__education_place=self).all()
 
 class Program(BaseModel):
     name = models.CharField(max_length=128, choices=constants.DegreeChoices, verbose_name='название программы', db_index=True)
