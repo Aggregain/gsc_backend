@@ -160,7 +160,7 @@ class AcademicRequirement(BaseModel):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, verbose_name='программа',
                                 related_name='academic_requirements')
     name = models.CharField(max_length=255, verbose_name='название требования',db_index=True,)
-    treshold = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='пороговый балл')
+    treshold = models.CharField(max_length=255,  verbose_name='пороговый балл')
 
     def __str__(self):
         return f'{self.name} {self.treshold}'
