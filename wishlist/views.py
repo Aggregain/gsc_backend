@@ -15,7 +15,6 @@ class QuerySetMixin(GenericAPIView):
                                                     'education_place__city__country',
 
                                                     ).prefetch_related('education_place__degrees',
-                                                                       'education_place__specialties',
                                                                        'education_place__degrees__academic_requirements',
                                                                        'education_place__degrees__deadlines',
                                                                        'education_place__degrees__expenses',
