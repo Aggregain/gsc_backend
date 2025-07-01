@@ -1,6 +1,6 @@
 
 from django.core.cache import cache
-#dfvfrvdf
+
 class Cacher:
 
     def __init__(self, cache_key, ttl=3600):

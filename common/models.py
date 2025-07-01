@@ -45,7 +45,7 @@ class EducationPlace(BaseModel):
     image = models.ImageField(null=True, blank=True, verbose_name='фото ВУЗа', upload_to=education_place_path)
     general_description = RichTextField(null=True, blank=True, verbose_name='основное описание')
     campus_description = RichTextField(null=True, blank=True, verbose_name='описание кампуса')
-    scholarship_description = RichTextField(verbose_name='описание стипендии', null=True, blank=True)
+    scholarship_description = RichTextField(verbose_name='скидки', null=True, blank=True)
     link = models.URLField(null=True, blank=True, verbose_name='ссылка на страницу ВУЗа')
     rating = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='рейтинг', db_index=True)
     foundation_year = models.PositiveIntegerField(null=True, blank=True, verbose_name='Год основания', db_index=True)
@@ -61,7 +61,7 @@ class EducationPlace(BaseModel):
 
     @property
     def specialties(self):
-        return Specialty.objects.filter(program__education_place=self).all()
+        return Specialty.objects.select_related('specialty_group', 'program').filter(program__education_place=self).all()
 
 class Program(BaseModel):
     name = models.CharField(max_length=128, choices=constants.DegreeChoices, verbose_name='название программы', db_index=True)

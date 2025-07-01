@@ -1,7 +1,5 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from django.db import models
-from django.forms import DateInput
 from django.urls.base import reverse
 from django.utils.html import format_html
 from import_export.admin import ImportExportModelAdmin
@@ -46,6 +44,8 @@ class DeadlineInline(TabularInline):
 
 
 class ExpenseInline(TabularInline):
+    verbose_name = "Проживание и питание"
+    verbose_name_plural = "Проживание и питание"
     model = Expense
     extra = 0
 
@@ -64,7 +64,7 @@ class AcademicRequirementInline(TabularInline):
 
 
 class SpecialtyInline(TabularInline):
-    fields = ('name', 'program', 'specialty_group', 'duration', 'price', 'admission_deadline', 'edit_link')
+    fields = ('name', 'program', 'specialty_group', 'duration', 'price', 'edit_link')
     model = Specialty
     extra = 0
     readonly_fields = ('edit_link',)
@@ -113,9 +113,9 @@ class CityAdmin(ModelAdmin):
 @admin.register(EducationPlace)
 class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
     list_per_page = 20
-    list_display = ('name', 'get_country', 'city', 'rating',)
+    list_display = ('name', 'get_country', 'city',)
     search_fields = ('name',)
-    exclude = ('prices_data',)
+    exclude = ('prices_data','rating')
 
     resource_class = EducationPlaceResource
 
@@ -136,7 +136,7 @@ class EducationPlaceAdmin(ImportExportModelAdmin, ModelAdmin):
 @admin.register(Program)
 class ProgramAdmin(ModelAdmin):
     inlines = [AcademicRequirementInline, ExpenseInline, SpecialtyInline,]
-    exclude = ('specialty_durations', 'description_academic', 'description_prices')
+    exclude = ('specialty_durations', 'description_prices', 'admission_deadline')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
