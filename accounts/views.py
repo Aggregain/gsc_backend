@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -67,8 +65,8 @@ class GoogleView(APIView):
             user = User.objects.get(email=data['email'])
         except User.DoesNotExist:
             user = User.objects.create_user(email=data['email'],
-                                            first_name=data['given_name'],
-                                            second_name=data['family_name'],
+                                            first_name=data.get('given_name'),
+                                            second_name=data.get('family_name'),
                                             is_active=True, )
 
         token = RefreshToken.for_user(user)
